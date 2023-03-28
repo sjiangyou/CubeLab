@@ -1,11 +1,7 @@
-#from Rubiks_Cube_Avg_Calc import *
+from Rubiks_Cube_Avg_Calc import Computer
 import pygame
 from pygame.locals import *
 import time
-
-key_dict = {K_0:'0', K_1:'1', K_2:'2', K_3:'3', K_4:'4', 
-            K_5:'5', K_6:'6', K_7:'7', K_8:'8', K_9:'9'}
-#settings = open('config.txt', 'r')
 
 class App:
     all_text = []
@@ -15,30 +11,63 @@ class App:
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         App.screen.fill(Color('black'))
         self.running = True
-        App.filein = Textbox(pos = (0, 0), text = 'File: ')
-        App.eventin = Textbox(pos = (0, 50), text = 'Event: ')
-        App.timein = Textbox(pos = (0, 100), text = 'Time: ')
-        App.scdisplay = Textbox(pos = (0, 150), text = 'Scramble: ')
-        #App.avdisplay = [Textbox(pos = (0, 50 * (i + 4)), text = (av + ': ')) for (i, av) in enumerate(settings)]
+        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = 50)
+        App.eventin = Textbox(pos = (0, 50), text = 'Puzzle: ', edit = True, fontsize = 50)
+        App.timein = Textbox(pos = (0, 100), text = 'Time: ', edit = True, fontsize = 50)
+        App.scdisplay = Textbox(pos = (0, 150), text = 'Scramble: ', \
+            edit = False, fontsize = 35)
+        App.alerts = Textbox(pos = (0, 200), text = '', edit = False, fontsize = 50)
+        App.computer = Computer('', '')
+        App.avdisplay = [Textbox(pos = (0, 50 * (i + 5)), text = (av + ': '), \
+                                 edit = False, fontsize = 25) for (i, av) in \
+                         enumerate(['AO5', 'AO12', 'AO20'])]
+        #for av in App.avdisplay:
+            #av.fontsize = 25
+            #av.rect = av.img.get_rect()
         App.active_text = App.all_text[0]
+    
     def change_active(self, mouse):
         for text in App.all_text:
-            if(pygame.Rect.collidepoint(text.rect, mouse)):
+            if(pygame.Rect.collidepoint(text.rect, mouse) and (text.edit)):
                 App.active_text = text
                 break
+    
     def run(self):
         while self.running:
             for event in pygame.event.get():
-                #print(event)
                 if(event.type == pygame.QUIT): self.running = False
                 if(event.type == KEYDOWN):
                     if(event.key == K_BACKSPACE):
-                        if(len(self.timein.text) > 6):
-                            self.timein.text = self.timein.text[:-1]
+                        if(len(self.active_text.text) > self.active_text.init_len):
+                            self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
+                        #func = #update_data[App.all_text.index(App.active_text)]
+                        print(App.computer.single)
+                        if(self.active_text == App.timein):
+                            App.computer.run(App.timein.text[6:])
+                            if(App.computer.single):
+                                self.alerts.text += 'New PB Single! '
+                                App.computer.PB_scramble = new_scramble
+                            if(App.computer.ao5):
+                                self.alerts.text += 'New PB AO5!'
+                            print(App.computer.times)
+                            for text in App.avdisplay:
+                                text.text = text.text[:text.text.find(' ') + 1] + \
+                                App.computer.mid_avg(text.text.find(':') - 2)
+                            print(self.alerts.text)
+                            new_scramble = App.computer.generate_scramble()
+                        else:
+                            App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
+                            new_scramble = App.computer.generate_scramble()
+                            try:
+                                App.computer.read_file()
+                            except:
+                                pass
+                            else:
+                                App.scdisplay.text = 'Scramble: ' + new_scramble
                         pass
-                    elif(event.key in key_dict):
-                        self.timein.text += event.unicode
+                    else:
+                        self.active_text.text += event.unicode
                     for text in App.all_text:
                         text.render_conv()
                 if(event.type == MOUSEBUTTONDOWN):
@@ -49,31 +78,38 @@ class App:
             if time.time() % 1 > 0.5:
                 pygame.draw.rect(self.screen, Color('white'), App.active_text.cursor)
             pygame.display.update()
+            pygame.display.flip()
              
 class Textbox:
-    def __init__(self, pos, text):
+    
+    def __init__(self, pos, text, edit, fontsize):
         self.pos = pos
         self.text = text
+        self.edit = edit
         self.fontname = 'couriernew'
-        self.fontsize = 50
+        self.fontsize = fontsize
         self.fontcolor = Color('white')
+        self.init_len = len(text)
         self.set_font()
         self.render_conv()
         self.draw()
         App.all_text.append(self)
+    
     def set_font(self):
         self.font = pygame.font.SysFont(self.fontname, self.fontsize)
+   
     def render_conv(self):
         self.img = self.font.render(self.text, True, self.fontcolor)
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
         self.cursor = Rect(self.rect.topright, (3, self.rect.height))
+        self.rect = Rect(self.pos, (pygame.display.Info().current_w, 50))
+    
     def draw(self):
         App.screen.blit(self.img, self.rect)
+    
     def check_mouse(self, mouse):
         return(self.rect.collidepoint(mouse))
 
 if(__name__ == '__main__'):
     App().run()
-
-#calculator()
