@@ -108,12 +108,8 @@ class Computer:
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
             return('NA')
-        else:
-            try:
-                avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
-                return(round(avg_time, 2))
-            except:
-                return('NA')
+        avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
+        return(round(avg_time, 2))
     
     def run(self, new_time):
         if(new_time.replace('.', '').isdigit()):
