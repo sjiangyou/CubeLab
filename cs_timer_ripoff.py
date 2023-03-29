@@ -18,12 +18,9 @@ class App:
             edit = False, fontsize = 35)
         App.alerts = Textbox(pos = (0, 200), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (0, 50 * (i + 5)), text = (av + ': '), \
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), \
                                  edit = False, fontsize = 25) for (i, av) in \
                          enumerate(['AO5', 'AO12', 'AO20'])]
-        #for av in App.avdisplay:
-            #av.fontsize = 25
-            #av.rect = av.img.get_rect()
         App.active_text = App.all_text[0]
     
     def change_active(self, mouse):
@@ -41,7 +38,6 @@ class App:
                         if(len(self.active_text.text) > self.active_text.init_len):
                             self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
-                        #func = #update_data[App.all_text.index(App.active_text)]
                         print(App.computer.single)
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
@@ -65,6 +61,7 @@ class App:
                                 pass
                             else:
                                 App.scdisplay.text = 'Scramble: ' + new_scramble
+                                App.scdisplay.rollover()
                         pass
                     else:
                         self.active_text.text += event.unicode
@@ -81,7 +78,6 @@ class App:
             pygame.display.flip()
              
 class Textbox:
-    
     def __init__(self, pos, text, edit, fontsize):
         self.pos = pos
         self.text = text
@@ -110,6 +106,19 @@ class Textbox:
     
     def check_mouse(self, mouse):
         return(self.rect.collidepoint(mouse))
+    
+    def rollover(self):
+        chars = list(self.text)
+        print(chars)
+        self.text = ''
+        for i in range(len(chars)):
+            if(i == 0):
+                pass
+            elif(i % 55 == 0):
+                chars.insert(i, '\n')
+        for char in chars:
+            self.text += char
+        print(self.text)              
 
 if(__name__ == '__main__'):
     App().run()
