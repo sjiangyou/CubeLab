@@ -62,8 +62,7 @@ class Computer:
                 elif(self.puzzle.find('1') == -1):
                     moves = ['F', 'L', 'R', 'B']
                 else:
-                    #sys.exit("We don't support Sqaure-1. Please rerun the program.")
-                    pass
+                    return 'No scramble available'
         layer_modifiers[0] = ''
         layer_modifiers[len(layer_modifiers) - 1] = ''
         return_value = ''
@@ -94,22 +93,29 @@ class Computer:
         return(return_value)
     
     def mid_avg(self, length):
-        for i, t in enumerate(self.times):
-            t = str(t)
-            t = t.split(':')
-            t.reverse()
-            t = [float(u) for u in t]
-            for j in range(len(t)):
-                t[j] *= (60 ** j)
-            t = sum(t)
-            self.times[i] = t
+        for i, time in enumerate(self.times):
+            time = self.convert_time(time)
+            self.times[i] = time
         lst_copy = list(self.times)
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
             return('NA')
-        avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
+        try:
+            avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
+        except ZeroDivisionError:
+            return('NA')
         return(round(avg_time, 2))
+    
+    def convert_time(time):
+        time = time.split(':')
+        time.reverse()
+        time = [float(u) for u in time]
+        for j in range(len(time)):
+            time[j] *= (60 ** j)
+        time = sum(time)
+        return time
+
     
     def run(self, new_time):
         if(new_time.replace('.', '').isdigit()):
@@ -155,7 +161,7 @@ def calculator():
     print(name)
     print(scramble)
     new_time = str(input('Time: '))
-    while(new_time.replace('.', '', 1).isdigit()):
+    while(new_time.replace('.', '', 1).replace(':', '').isdigit()):
         times_lst.insert(0, new_time)
         current_ao5 = mid_avg(times_lst[:5], 5)
         try:
@@ -187,25 +193,18 @@ def calculator():
     print(str(mid_avg(times_lst, len(times_lst))) + " Average of " + str(len(times_lst)))
 
 def mid_avg(lst, length):
-    for i, t in enumerate(lst):
-        t = t.split(':')
-        t.reverse()
-        t = [float(u) for u in t]
-        for j in range(len(t)):
-            t[j] *= (60 ** j)
-        t = sum(t)
-        lst[i] = t
+    for i, time in enumerate(lst):
+        time = convert_time(time)
     lst_copy = list(lst)
     lst_copy.sort()
     updated_times_lst = lst_copy[1:len(lst_copy) - 1]
-    try:
-        if(len(updated_times_lst) < length - 2):
-            raise ValueError
-    except ValueError as e:
+    if(len(updated_times_lst) < length - 2):
         return('NA')
-    else:
+    try:
         avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
-        return(round(avg_time, 2))
+    except ZeroDivisionError:
+        return('NA')
+    return(round(avg_time, 2))
 
 def read_file(file, puzzle):
     text = file.read()
@@ -238,8 +237,11 @@ def write_file(file, name, times_lst, avg5, single, scramble):
     return_str = name + '\nS: ' + str(single) + '\nA: ' + str(avg5) + '\nPB Scramble: ' + scramble
     if(len(times_lst) != 0):
         return_str += '\n'
-    for i, t in enumerate(times_lst):
-        return_str += t
+    for i, time in enumerate(times_lst):
+        time = str(convert_time(time))
+        while(len(time[time.find('.'):]) < 3):
+            time += '0'
+        return_str += time
         if(i == len(times_lst) - 1):
             break
         elif(i % 10 == 9):
@@ -302,6 +304,15 @@ def generate_scramble(puzzle):
         return_value += move[1]
         return_value += ' '
     return return_value 
+
+def convert_time(time):
+    time = time.split(':')
+    time.reverse()
+    time = [float(u) for u in time]
+    for j in range(len(time)):
+        time[j] *= (60 ** j)
+    time = sum(time)
+    return time
 
 if __name__ == '__main__':
     calculator()
