@@ -94,7 +94,7 @@ class Computer:
     
     def mid_avg(self, length):
         for i, time in enumerate(self.times):
-            time = self.convert_time(time)
+            time = float(self.convert_time(time))
             self.times[i] = time
         lst_copy = list(self.times)
         lst_copy.sort()
@@ -194,9 +194,12 @@ def calculator():
 
 def mid_avg(lst, length):
     for i, time in enumerate(lst):
-        time = convert_time(time)
+        print('loop')
+        lst[i] = convert_time(time)
     lst_copy = list(lst)
     lst_copy.sort()
+    print(lst)
+    print(lst_copy)
     updated_times_lst = lst_copy[1:len(lst_copy) - 1]
     if(len(updated_times_lst) < length - 2):
         return('NA')
@@ -306,13 +309,14 @@ def generate_scramble(puzzle):
     return return_value 
 
 def convert_time(time):
+    time = str(time)
     time = time.split(':')
     time.reverse()
     time = [float(u) for u in time]
     for j in range(len(time)):
         time[j] *= (60 ** j)
     time = sum(time)
-    return time
+    return float(time)
 
 if __name__ == '__main__':
     calculator()
