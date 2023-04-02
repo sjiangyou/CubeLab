@@ -194,12 +194,9 @@ def calculator():
 
 def mid_avg(lst, length):
     for i, time in enumerate(lst):
-        print('loop')
         lst[i] = convert_time(time)
     lst_copy = list(lst)
     lst_copy.sort()
-    print(lst)
-    print(lst_copy)
     updated_times_lst = lst_copy[1:len(lst_copy) - 1]
     if(len(updated_times_lst) < length - 2):
         return('NA')
