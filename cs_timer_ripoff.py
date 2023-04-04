@@ -64,10 +64,16 @@ class App:
                                 App.scdisplay[0].text = 'Scramble: ' + new_scramble
                                 App.scdisplay[0].rollover()
                                 count = 0
-                                while(App.scdisplay[0].text.find('\n') != -1):
-                                    App.scdisplay.append(Textbox(pos = (0, 180 + (30 * count)), text = 'Test', edit = False, fontsize = 50))
+                                index = App.scdisplay[0].text.find('\n')
+                                while(index != -1):
+                                    if(count + 2 > len(App.scdisplay)):
+                                        App.scdisplay.append(Textbox(pos = (0, 180 + (30 * count)), text = 'Test', edit = False, \
+                                                                 fontsize = 30))
+                                    else:
+                                        App.scdisplay[count + 1].text = 'Test'
                                     App.scdisplay[0].text = App.scdisplay[0].text.replace('\n', ' ', 1)
                                     count += 1
+                                    index = App.scdisplay[0].text.find('\n')
                     else:
                         self.active_text.text += event.unicode
                     for text in App.all_text:
@@ -114,17 +120,21 @@ class Textbox:
     
     def rollover(self):
         chars = list(self.text)
-        print(chars)
+        print(self.text)
         self.text = ''
+        col_num = 0
         for i in range(len(chars)):
-            if(i == 0):
-                pass
-            elif(i % 55 == 0):
-                chars.insert(i, '\n')
+            try: 
+                if(col_num == 0): after = (chars[i + 55] == ' ')
+            except IndexError:continue
+            if(col_num % 55 == 54 and after):
+                chars[i + 1] = '\n'
+            elif(chars[i] == ' ' and 51 <= col_num % 55 <= 53 and not after):
+                chars[i] = '\n'
+            col_num += 1
         for char in chars:
             self.text += char
         print(self.text)              
 
 if(__name__ == '__main__'):
-    print(os.getcwd())
     App().run()
