@@ -62,18 +62,17 @@ class App:
                                 pass
                             else:
                                 App.scdisplay[0].text = 'Scramble: ' + new_scramble
-                                App.scdisplay[0].rollover()
+                                indicies = App.scdisplay[0].rollover()
                                 count = 0
-                                index = App.scdisplay[0].text.find('\n')
-                                while(index != -1):
+                                for num, loc in enumerate(indicies[:-1]):
                                     if(count + 2 > len(App.scdisplay)):
-                                        App.scdisplay.append(Textbox(pos = (0, 180 + (30 * count)), text = 'Test', edit = False, \
-                                                                 fontsize = 30))
+                                        App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, \
+                                                                 fontsize = 35))
                                     else:
-                                        App.scdisplay[count + 1].text = 'Test'
-                                    App.scdisplay[0].text = App.scdisplay[0].text.replace('\n', ' ', 1)
+                                        App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
+                                    #App.scdisplay[0].text = App.scdisplay[0].text.replace('+', ' ', 1)
                                     count += 1
-                                    index = App.scdisplay[0].text.find('\n')
+                                App.scdisplay[0].text = App.scdisplay[0].text[0:indicies[0]]
                     else:
                         self.active_text.text += event.unicode
                     for text in App.all_text:
@@ -106,6 +105,9 @@ class Textbox:
         self.font = pygame.font.Font(f, self.fontsize)
    
     def render_conv(self):
+        try:
+            if(self.text[0] == ' '):self.text = self.text[1:]
+        except:pass
         self.img = self.font.render(self.text, True, self.fontcolor)
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
@@ -123,18 +125,23 @@ class Textbox:
         print(self.text)
         self.text = ''
         col_num = 0
+        return_indicies = []
         for i in range(len(chars)):
             try: 
-                if(col_num == 0): after = (chars[i + 55] == ' ')
+                if(col_num == 0): after = (chars[i + 50] == ' ')
             except IndexError:continue
-            if(col_num % 55 == 54 and after):
-                chars[i + 1] = '\n'
-            elif(chars[i] == ' ' and 51 <= col_num % 55 <= 53 and not after):
-                chars[i] = '\n'
+            if(col_num % 50 == 49 and after):
+                #chars[i + 1] = '+'
+                return_indicies.append(i + 2)
+            elif(chars[i] == ' ' and 46 <= col_num % 50 <= 48 and not after):
+                #chars[i] = '+'
+                return_indicies.append(i + 1)
             col_num += 1
         for char in chars:
             self.text += char
-        print(self.text)              
+        print(self.text)
+        return_indicies.append(len(self.text) - 1)
+        return return_indicies      
 
 if(__name__ == '__main__'):
     App().run()
