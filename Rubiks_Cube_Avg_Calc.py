@@ -303,7 +303,7 @@ def generate_scramble(puzzle):
         return_value += move[0]
         return_value += move[1]
         return_value += ' '
-    return return_value 
+    return return_value + ' '
 
 def convert_time(time):
     time = str(time)
