@@ -15,12 +15,10 @@ class App:
         App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = 50)
         App.eventin = Textbox(pos = (0, 50), text = 'Puzzle: ', edit = True, fontsize = 50)
         App.timein = Textbox(pos = (0, 100), text = 'Time: ', edit = True, fontsize = 50)
-        App.scdisplay = [Textbox(pos = (0, 150), text = 'Scramble: ', \
-            edit = False, fontsize = 35)]
+        App.scdisplay = [Textbox(pos = (0, 150), text = 'Scramble: ', edit = False, fontsize = 35)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), \
-                                 edit = False, fontsize = 25) for (i, av) in \
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in \
                          enumerate(['AO5', 'AO12', 'AO20'])]
         App.active_text = App.all_text[0]
     
@@ -35,8 +33,7 @@ class App:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT): self.running = False
                 if(event.type == KEYDOWN):
-                    if(event.key == K_BACKSPACE and \
-                       len(self.active_text.text) > self.active_text.init_len):
+                    if(event.key == K_BACKSPACE and len(self.active_text.text) > self.active_text.init_len):
                         self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
                         print(App.computer.single)
@@ -49,8 +46,7 @@ class App:
                                 self.alerts.text += 'New PB AO5!'
                             print(App.computer.times)
                             for text in App.avdisplay:
-                                text.text = text.text[:text.text.find(' ') + 1] + \
-                                App.computer.mid_avg(text.text.find(':') - 2)
+                                text.text = text.text[:text.text.find(' ') + 1] + App.computer.mid_avg(text.text.find(':') - 2)
                             print(self.alerts.text)
                             new_scramble = App.computer.generate_scramble()
                         else:
@@ -66,12 +62,13 @@ class App:
                                 count = 0
                                 for num, loc in enumerate(indicies[:-1]):
                                     if(count + 2 > len(App.scdisplay)):
-                                        App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, \
-                                                                 fontsize = 35))
+                                        App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
                                     else:
                                         App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
-                                    #App.scdisplay[0].text = App.scdisplay[0].text.replace('+', ' ', 1)
                                     count += 1
+                                for idx in range(len(App.scdisplay)):
+                                    if idx > count:
+                                        App.scdisplay[idx].text = ''
                                 App.scdisplay[0].text = App.scdisplay[0].text[0:indicies[0]]
                     else:
                         self.active_text.text += event.unicode
@@ -121,27 +118,23 @@ class Textbox:
         return(self.rect.collidepoint(mouse))
     
     def rollover(self):
-        chars = list(self.text)
-        print(self.text)
-        self.text = ''
-        col_num = 0
-        return_indicies = []
-        for i in range(len(chars)):
-            try: 
-                if(col_num == 0): after = (chars[i + 50] == ' ')
-            except IndexError:continue
-            if(col_num % 50 == 49 and after):
-                #chars[i + 1] = '+'
-                return_indicies.append(i + 2)
-            elif(chars[i] == ' ' and 46 <= col_num % 50 <= 48 and not after):
-                #chars[i] = '+'
-                return_indicies.append(i + 1)
-            col_num += 1
-        for char in chars:
-            self.text += char
-        print(self.text)
-        return_indicies.append(len(self.text) - 1)
-        return return_indicies      
+        return_indicies = [0]
+        possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
+        low, high = 46, 49
+        print(possible_splits)
+        while possible_splits:
+            try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
+            except ValueError: return_indicies.append(possible_splits[-1])
+            possible_splits = [idx for idx in possible_splits if idx > return_indicies[-1]]
+            delta_index = return_indicies[-1] - return_indicies[-2]
+            low += delta_index
+            high += delta_index
+        print(return_indicies)
+        #return_indicies.append(len(self.text) - 1)
+        return return_indicies[1:]
+
+def search_num_list(lst, lower_bound, upper_bound):
+    return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
     App().run()
