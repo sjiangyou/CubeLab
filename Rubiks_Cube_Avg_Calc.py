@@ -9,8 +9,8 @@ class Computer:
         self.ao5 = False
     
     def read_file(self):
-        self.file = open(self.file, 'r')
-        text = self.file.read()
+        file = open(self.file, 'r')
+        text = file.read()
         text = text.split('\n')
         name = text[0]
         (PB_avg5, PB_single) = (text[2][3:], text[1][3:])
@@ -36,7 +36,7 @@ class Computer:
             return_lst = []
         (self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble) \
         = (return_lst, name, PB_single, PB_avg5, PB_scramble)
-        self.file.close()
+        file.close()
     
     def generate_scramble(self):
         moves = ['F', 'U', 'R', 'L', 'D', 'B']
@@ -107,16 +107,16 @@ class Computer:
             return('NA')
         return(round(avg_time, 2))
     
-    def convert_time(time):
+    def convert_time(self,time):
+        time = str(time)
         time = time.split(':')
         time.reverse()
         time = [float(u) for u in time]
         for j in range(len(time)):
             time[j] *= (60 ** j)
         time = sum(time)
-        return time
+        return str(time)
 
-    
     def run(self, new_time):
         if(new_time.replace('.', '').isdigit()):
             print('execution')
@@ -146,10 +146,26 @@ class Computer:
             print(str(mid_avg(self.times[:20], 20)) + ' Average of 20')
             scramble = generate_scramble(self.puzzle)
             print(scramble)
-        #f = open(sys.argv[1], 'w')
-        #write_file(f, self.name, self.times, self.PB_avg5, self.PB_single, self.PB_scramble)
-        #f.close()
-        #print(str(mid_avg(self.times, len(self.times))) + " Average of " + str(len(self.times)))
+        #self.write_file()
+    
+    def write_file(self):
+        file = open(self.file, 'w')
+        return_str = self.name + '\nS: ' + str(float(self.PB_single)) + '\nA: ' + str(self.PB_avg5) + '\nPB Scramble: ' + self.PB_scramble
+        if(len(self.times) != 0):
+            return_str += '\n'
+        for i, time in enumerate(self.times):
+            time = str(convert_time(time))
+            while(len(time[time.find('.'):]) < 3):
+                time += '0'
+            return_str += time
+            if(i == len(self.times) - 1):
+                break
+            elif(i % 10 == 9):
+                return_str += '\n'
+            else:
+                return_str += ' '
+        file.write(str(return_str))
+        file.close()
 
 #####################
 def calculator():
