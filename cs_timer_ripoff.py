@@ -58,19 +58,19 @@ class App:
                                 new_scramble = App.computer.generate_scramble()
                             except:
                                 new_scramble = 'Failed to read file'
-                            App.scdisplay[0].text = 'Scramble: ' + new_scramble
-                            indicies = App.scdisplay[0].rollover()
-                            count = 0
-                            for num, loc in enumerate(indicies[:-1]):
-                                if(count + 2 > len(App.scdisplay)):
-                                    App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
-                                else:
-                                    App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
-                                count += 1
-                            for idx in range(len(App.scdisplay)):
-                                if idx > count:
-                                    App.scdisplay[idx].text = ''
-                            App.scdisplay[0].text = App.scdisplay[0].text[0:indicies[0]]
+                        App.scdisplay[0].text = 'Scramble: ' + new_scramble
+                        indicies = App.scdisplay[0].rollover()
+                        count = 0
+                        for num, loc in enumerate(indicies[:-1]):
+                            if(count + 2 > len(App.scdisplay)):
+                                App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
+                            else:
+                                App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
+                            count += 1
+                        for idx in range(len(App.scdisplay)):
+                            if idx > count:
+                                App.scdisplay[idx].text = ''
+                        App.scdisplay[0].text = App.scdisplay[0].text[0:indicies[0]]
                     else:
                         self.active_text.text += event.unicode
                     for text in App.all_text:
