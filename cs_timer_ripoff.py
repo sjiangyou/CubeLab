@@ -47,7 +47,7 @@ class App:
                                 self.alerts.text += 'New PB AO5!'
                             print(App.computer.times)
                             for text in App.avdisplay:
-                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(text.text.find(':') - 2))
+                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(text.text[text.text.find(':') - 2:text.text.find(':')]))
                             App.computer.write_file()
                             print(self.alerts.text)
                             new_scramble = App.computer.generate_scramble()
