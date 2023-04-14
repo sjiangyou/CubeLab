@@ -96,7 +96,7 @@ class Computer:
         for i, time in enumerate(self.times):
             time = float(self.convert_time(time))
             self.times[i] = time
-        lst_copy = list(self.times)
+        lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
