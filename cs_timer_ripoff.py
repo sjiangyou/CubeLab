@@ -52,6 +52,7 @@ class App:
                             App.computer.write_file()
                             print(self.alerts.text)
                             new_scramble = App.computer.generate_scramble()
+                            App.timein.text = App.timein.text[:6]
                         else:
                             App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
                             try:
