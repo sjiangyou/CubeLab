@@ -36,21 +36,20 @@ class App:
                     if(event.key == K_BACKSPACE and len(self.active_text.text) > self.active_text.init_len):
                         self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
-                        print(App.computer.single)
                         if(self.active_text == App.timein):
+                            prev_scramble = App.computer.scramble
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
                             if(App.computer.single):
                                 self.alerts.text += 'New PB Single! '
-                                App.computer.PB_scramble = new_scramble
+                                App.computer.PB_scramble = prev_scramble
+                                App.computer.single = False
                             if(App.computer.ao5):
                                 self.alerts.text += 'New PB AO5!'
-                            print(App.computer.times)
+                                App.computer.ao5 = False
                             for text in App.avdisplay:
                                 text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find(':') - 2:text.text.find(':')])))
-                                print(text.text)
                             App.computer.write_file()
-                            print(self.alerts.text)
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         else:
@@ -124,7 +123,6 @@ class Textbox:
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
         low, high = 46, 49
-        print(possible_splits)
         while possible_splits:
             try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
             except ValueError: return_indicies.append(possible_splits[-1])
@@ -132,8 +130,6 @@ class Textbox:
             delta_index = return_indicies[-1] - return_indicies[-2]
             low += delta_index
             high += delta_index
-        print(return_indicies)
-        #return_indicies.append(len(self.text) - 1)
         return return_indicies[1:]
 
 def search_num_list(lst, lower_bound, upper_bound):

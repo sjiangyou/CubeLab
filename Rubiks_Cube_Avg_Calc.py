@@ -90,6 +90,7 @@ class Computer:
             return_value += move[0]
             return_value += move[1]
             return_value += ' '
+        self.scramble = return_value
         return(return_value)
     
     def mid_avg(self, length):
@@ -119,34 +120,23 @@ class Computer:
 
     def run(self, new_time):
         if(new_time.replace('.', '').isdigit()):
-            print('execution')
             self.times.insert(0, str(new_time))
             current_ao5 = mid_avg(self.times[:5], 5)
             try:
                 if(float(new_time) < float(self.PB_single)):
                     self.PB_single = new_time
                     self.single = True
-                    print('New PB: ' + str(self.PB_single))
             except:
                 self.PB_single = new_time
                 self.single = True
-                print('New PB: ' + str(self.PB_single))
             try:
                 if(current_ao5 < float(self.PB_avg5)):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
-                    print('New PB AO5: ' + str(self.PB_avg5))
             except:
                 if(len(self.times) > 4):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
-                    print('New PB AO5: ' + str(self.PB_avg5))
-            print(str(current_ao5) + " Average of 5")
-            print(str(mid_avg(self.times[:12], 12)) + ' Average of 12')
-            print(str(mid_avg(self.times[:20], 20)) + ' Average of 20')
-            scramble = generate_scramble(self.puzzle)
-            print(scramble)
-        #self.write_file()
     
     def write_file(self):
         file = open(self.file, 'w')
@@ -167,7 +157,7 @@ class Computer:
         file.write(str(return_str))
         file.close()
 
-#####################
+####################
 def calculator():
     f = open(sys.argv[1], 'r')
     puzzle = str(input("Puzzle: "))
