@@ -19,7 +19,7 @@ class App:
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
         App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in \
-                         enumerate(['AO05', 'AO12', 'AO20'])]
+                         enumerate(['AO5', 'AO12', 'AO20'])]
         App.active_text = App.all_text[0]
     
     def change_active(self, mouse):
@@ -48,7 +48,7 @@ class App:
                                 self.alerts.text += 'New PB AO5!'
                                 App.computer.ao5 = False
                             for text in App.avdisplay:
-                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find(':') - 2:text.text.find(':')])))
+                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
                             App.computer.write_file()
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
