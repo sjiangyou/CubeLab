@@ -3,7 +3,9 @@ import pygame
 from pygame.locals import *
 import time
 import os
-f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Courier_New.ttf'), 'r')
+
+user_settings = open('config.txt', 'r').read().split('\n')
+f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), user_settings[3]), 'r')
 class App:
     all_text = []
     active_text = None
@@ -11,15 +13,16 @@ class App:
         pygame.init()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         App.screen.fill(Color('black'))
+        self.main_fontsize = int(user_settings[5])
+        self.other_fontsize = int(user_settings[7])
         self.running = True
-        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = 50)
-        App.eventin = Textbox(pos = (0, 50), text = 'Puzzle: ', edit = True, fontsize = 50)
-        App.timein = Textbox(pos = (0, 100), text = 'Time: ', edit = True, fontsize = 50)
-        App.scdisplay = [Textbox(pos = (0, 150), text = 'Scramble: ', edit = False, fontsize = 35)]
+        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = self.main_fontsize)
+        App.eventin = Textbox(pos = (0, self.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = self.main_fontsize)
+        App.timein = Textbox(pos = (0, 2 * self.main_fontsize), text = 'Time: ', edit = True, fontsize = self.main_fontsize)
+        App.scdisplay = [Textbox(pos = (0, 3 * self.main_fontsize), text = 'Scramble: ', edit = False, fontsize = self.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in \
-                         enumerate(['AO05', 'AO12', 'AO20'])]
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(['AO05', 'AO12', 'AO20'])]
         App.active_text = App.all_text[0]
     
     def change_active(self, mouse):
@@ -64,7 +67,7 @@ class App:
                         count = 0
                         for num, loc in enumerate(indicies[:-1]):
                             if(count + 2 > len(App.scdisplay)):
-                                App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
+                                App.scdisplay.append(Textbox(pos = (0, (self.main_fontsize * 3) + (self.other_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
                             else:
                                 App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
                             count += 1
