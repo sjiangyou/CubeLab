@@ -1,3 +1,4 @@
 test.py
 *.txt
+!example.txt
 __pycache__/
