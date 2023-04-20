@@ -22,7 +22,7 @@ class App:
         App.scdisplay = [Textbox(pos = (0, 3 * self.main_fontsize), text = 'Scramble: ', edit = False, fontsize = self.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(['AO05', 'AO12', 'AO20'])]
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
     
     def apply_user_settings(self):
