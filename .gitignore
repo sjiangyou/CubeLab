@@ -1,4 +1,5 @@
 test.py
 *.txt
+!config.txt
 !example.txt
 __pycache__/

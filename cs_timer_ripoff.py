@@ -3,24 +3,38 @@ import pygame
 from pygame.locals import *
 import time
 import os
-f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Courier_New.ttf'), 'r')
+
+user_settings = (open('config.txt', 'r').read().split('\n'))[1:12:2]
+print(user_settings)
+f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), user_settings[1]), 'r')
 class App:
     all_text = []
     active_text = None
     def __init__(self):
         pygame.init()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        App.screen.fill(Color('black'))
+        self.apply_user_settings()
+        App.screen.fill(App.backgroundcolor)
         self.running = True
-        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = 50)
-        App.eventin = Textbox(pos = (0, 50), text = 'Puzzle: ', edit = True, fontsize = 50)
-        App.timein = Textbox(pos = (0, 100), text = 'Time: ', edit = True, fontsize = 50)
-        App.scdisplay = [Textbox(pos = (0, 150), text = 'Scramble: ', edit = False, fontsize = 35)]
+        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = self.main_fontsize)
+        App.eventin = Textbox(pos = (0, self.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = self.main_fontsize)
+        App.timein = Textbox(pos = (0, 2 * self.main_fontsize), text = 'Time: ', edit = True, fontsize = self.main_fontsize)
+        App.scdisplay = [Textbox(pos = (0, 3 * self.main_fontsize), text = 'Scramble: ', edit = False, fontsize = self.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 50), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in \
-                         enumerate(['AO5', 'AO12', 'AO20'])]
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
+    
+    def apply_user_settings(self):
+        self.averages = user_settings[0].split(', ')
+        self.main_fontsize = int(user_settings[2])
+        self.other_fontsize = int(user_settings[3])
+        App.textcolor, App.backgroundcolor = self.extract_color(user_settings[4]), self.extract_color(user_settings[5])
+    
+    def extract_color(self, rgb):
+        rgb = rgb.split(',')
+        rgb = [int(value) for value in rgb]
+        return tuple(rgb)
     
     def change_active(self, mouse):
         for text in App.all_text:
@@ -64,7 +78,7 @@ class App:
                         count = 0
                         for num, loc in enumerate(indicies[:-1]):
                             if(count + 2 > len(App.scdisplay)):
-                                App.scdisplay.append(Textbox(pos = (0, 185 + (35 * count)), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
+                                App.scdisplay.append(Textbox(pos = (0, (self.main_fontsize * 3) + (self.other_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
                             else:
                                 App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
                             count += 1
@@ -78,7 +92,7 @@ class App:
                         text.render_conv()
                 if(event.type == MOUSEBUTTONDOWN):
                     self.change_active(event.pos)
-            self.screen.fill(Color('black'))
+            self.screen.fill(App.backgroundcolor)
             for text in App.all_text:
                 text.draw()
             if time.time() % 1 > 0.5:
@@ -93,7 +107,7 @@ class Textbox:
         self.text = text
         self.edit = edit
         self.fontsize = fontsize
-        self.fontcolor = Color('white')
+        self.fontcolor = App.textcolor
         self.init_len = len(text)
         self.set_font()
         self.render_conv()
