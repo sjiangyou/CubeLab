@@ -1,9 +1,9 @@
 Averages displayed: 
-AO05, AO12, AO20
+AO5, AO12, AO20
 Font: 
 Courier_New.ttf
 Main Fontsize: 
-30
+50
 Scramble Fontsize = 
 35
 Text color: 

@@ -4,17 +4,17 @@ from pygame.locals import *
 import time
 import os
 
-user_settings = open('config.txt', 'r').read().split('\n')
-f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), user_settings[3]), 'r')
+user_settings = (open('config.txt', 'r').read().split('\n'))[1:12:2]
+print(user_settings)
+f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), user_settings[1]), 'r')
 class App:
     all_text = []
     active_text = None
     def __init__(self):
         pygame.init()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        App.screen.fill(Color('black'))
-        self.main_fontsize = int(user_settings[5])
-        self.other_fontsize = int(user_settings[7])
+        self.apply_user_settings()
+        App.screen.fill(App.backgroundcolor)
         self.running = True
         App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = self.main_fontsize)
         App.eventin = Textbox(pos = (0, self.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = self.main_fontsize)
@@ -24,6 +24,17 @@ class App:
         App.computer = Computer('', '')
         App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(['AO05', 'AO12', 'AO20'])]
         App.active_text = App.all_text[0]
+    
+    def apply_user_settings(self):
+        self.averages = user_settings[0].split(', ')
+        self.main_fontsize = int(user_settings[2])
+        self.other_fontsize = int(user_settings[3])
+        App.textcolor, App.backgroundcolor = self.extract_color(user_settings[4]), self.extract_color(user_settings[5])
+    
+    def extract_color(self, rgb):
+        rgb = rgb.split(',')
+        rgb = [int(value) for value in rgb]
+        return tuple(rgb)
     
     def change_active(self, mouse):
         for text in App.all_text:
@@ -81,7 +92,7 @@ class App:
                         text.render_conv()
                 if(event.type == MOUSEBUTTONDOWN):
                     self.change_active(event.pos)
-            self.screen.fill(Color('black'))
+            self.screen.fill(App.backgroundcolor)
             for text in App.all_text:
                 text.draw()
             if time.time() % 1 > 0.5:
@@ -96,7 +107,7 @@ class Textbox:
         self.text = text
         self.edit = edit
         self.fontsize = fontsize
-        self.fontcolor = Color('white')
+        self.fontcolor = App.textcolor
         self.init_len = len(text)
         self.set_font()
         self.render_conv()
