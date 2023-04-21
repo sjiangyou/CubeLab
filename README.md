@@ -8,5 +8,5 @@ Averages are automatically calculated at the bottom of the screen.
 
 Configuration Settings:
 The averages displayed can be changed by listing up to 3 of them on the first line.
-Font type and sizes can be changed on their respective lines
-The color of the background and text can be changed by typing in RGB values (either R,G,B or (R,G,B)) are ok. 
+Font type and sizes can be changed on their respective lines.
+The color of the background and text can be changed by typing in RGB values, only R,G,B is acceptable. 
