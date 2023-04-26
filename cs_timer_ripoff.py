@@ -2,7 +2,6 @@ from Rubiks_Cube_Avg_Calc import Computer
 import pygame
 from pygame.locals import *
 import time
-import os
 
 user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
 class App:
