@@ -4,9 +4,7 @@ from pygame.locals import *
 import time
 import os
 
-user_settings = (open('config.txt', 'r').read().split('\n'))[1:12:2]
-print(user_settings)
-f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), user_settings[1]), 'r')
+user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
 class App:
     all_text = []
     active_text = None
@@ -16,20 +14,20 @@ class App:
         self.apply_user_settings()
         App.screen.fill(App.backgroundcolor)
         self.running = True
-        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = self.main_fontsize)
-        App.eventin = Textbox(pos = (0, self.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = self.main_fontsize)
-        App.timein = Textbox(pos = (0, 2 * self.main_fontsize), text = 'Time: ', edit = True, fontsize = self.main_fontsize)
-        App.scdisplay = [Textbox(pos = (0, 3 * self.main_fontsize), text = 'Scramble: ', edit = False, fontsize = self.other_fontsize)]
-        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = 50)
+        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = App.main_fontsize)
+        App.eventin = Textbox(pos = (0, App.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = App.main_fontsize)
+        App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
+        App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
+        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = App.main_fontsize)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - self.main_fontsize), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 25), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
     
     def apply_user_settings(self):
         self.averages = user_settings[0].split(', ')
-        self.main_fontsize = int(user_settings[2])
-        self.other_fontsize = int(user_settings[3])
-        App.textcolor, App.backgroundcolor = self.extract_color(user_settings[4]), self.extract_color(user_settings[5])
+        App.main_fontsize = int(user_settings[1])
+        App.other_fontsize = int(user_settings[2])
+        App.textcolor, App.backgroundcolor = self.extract_color(user_settings[3]), self.extract_color(user_settings[4])
     
     def extract_color(self, rgb):
         rgb = rgb.split(',')
@@ -99,7 +97,6 @@ class App:
                 pygame.draw.rect(self.screen, Color('white'), App.active_text.cursor)
             pygame.display.update()
             pygame.display.flip()
-        f.close()
              
 class Textbox:
     def __init__(self, pos, text, edit, fontsize):
@@ -115,7 +112,7 @@ class Textbox:
         App.all_text.append(self)
     
     def set_font(self):
-        self.font = pygame.font.Font(f, self.fontsize)
+        self.font = pygame.font.Font('Courier_New.ttf', self.fontsize)
    
     def render_conv(self):
         try:
@@ -136,7 +133,8 @@ class Textbox:
     def rollover(self):
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
-        low, high = 46, 49
+        high = (pygame.display.get_surface().get_width() // (self.fontsize)) - 1
+        low = high - 3
         while possible_splits:
             try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
             except ValueError: return_indicies.append(possible_splits[-1])
