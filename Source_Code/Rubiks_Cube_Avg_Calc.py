@@ -11,7 +11,6 @@ class Computer:
         file = open(self.file, 'r')
         text = file.read()
         text = text.split('\n')
-        print(text)
         name = text[0]
         PB_avg5, PB_single = text[2][3:], text[1][3:]
         if(self.puzzle[0] == 'M'):
