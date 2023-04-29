@@ -2,8 +2,8 @@ from Rubiks_Cube_Avg_Calc import Computer
 import pygame
 from pygame.locals import *
 import time
+import os
 
-user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
 class App:
     all_text = []
     active_text = None
@@ -64,7 +64,7 @@ class App:
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         else:
-                            App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
+                            App.computer = Computer(os.path.join(os.getcwd(), App.filein.text[6:]), App.eventin.text[8:])
                             try:
                                 App.computer.read_file()
                                 new_scramble = App.computer.generate_scramble()
@@ -96,6 +96,7 @@ class App:
                 pygame.draw.rect(self.screen, Color('white'), App.active_text.cursor)
             pygame.display.update()
             pygame.display.flip()
+
              
 class Textbox:
     def __init__(self, pos, text, edit, fontsize):
@@ -143,8 +144,17 @@ class Textbox:
             high += delta_index
         return return_indicies[1:]
 
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, '')
+
+
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
+    os.chdir(find('config.txt', os.path.expanduser('~/Documents')))
+    print(os.getcwd())
+    user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
     App().run()
