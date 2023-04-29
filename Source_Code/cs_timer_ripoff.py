@@ -149,12 +149,11 @@ def find(name, path):
         if name in files:
             return os.path.join(root, '')
 
-
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
-    os.chdir(find('config.txt', os.path.expanduser('~/Documents')))
+    os.chdir(find('example.txt', os.path.expanduser('~/Documents')))
     print(os.getcwd())
     user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
     App().run()
