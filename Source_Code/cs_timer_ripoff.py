@@ -64,7 +64,7 @@ class App:
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         else:
-                            App.computer = Computer(os.path.join(os.getcwd(), App.filein.text[6:]), App.eventin.text[8:])
+                            App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
                             try:
                                 App.computer.read_file()
                                 new_scramble = App.computer.generate_scramble()

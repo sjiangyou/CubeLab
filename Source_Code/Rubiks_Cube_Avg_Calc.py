@@ -11,6 +11,7 @@ class Computer:
         file = open(self.file, 'r')
         text = file.read()
         text = text.split('\n')
+        print(text)
         name = text[0]
         PB_avg5, PB_single = text[2][3:], text[1][3:]
         if(self.puzzle[0] == 'M'):
@@ -65,7 +66,7 @@ class Computer:
             try:
                 prev_moves.index(new_move[0])
                 continue
-            except IndexError:pass
+            except (ValueError, IndexError):pass
             scramble.append(new_move)
             prev_moves = []
             for move in scramble:
@@ -78,7 +79,7 @@ class Computer:
                 if(i == 76):
                     move = ('U', rotation_modifiers[random.randint(2, 3)], '')
         for move in scramble:
-            return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]}'
+            return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]} '
         self.scramble = return_value
         return return_value
     
