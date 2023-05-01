@@ -48,7 +48,8 @@ class App:
                         self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
                         if(self.active_text == App.timein):
-                            prev_scramble = App.computer.scramble
+                            try:prev_scramble = App.computer.scramble
+                            except AttributeError:prev_scramble = ''
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
                             if(App.computer.single):

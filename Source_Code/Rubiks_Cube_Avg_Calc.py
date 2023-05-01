@@ -108,28 +108,28 @@ class Computer:
         return time
 
     def run(self, new_time):
-        if(new_time.replace('.', '').isdigit()):
+        if(new_time.replace('.', '').replace(':','').isdigit()):
             self.times.insert(0, str(new_time))
-            current_ao5 = self.mid_avg(self.times[:5], 5)
+            current_ao5 = self.mid_avg(5)
             try:
-                if(float(new_time) < float(self.PB_single)):
+                if(self.convert_time(new_time) < float(self.PB_single)):
                     self.PB_single = new_time
                     self.single = True
-            except TypeError:
+            except (ValueError, TypeError):
                 self.PB_single = new_time
                 self.single = True
             try:
                 if(current_ao5 < float(self.PB_avg5)):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
-            except TypeError:
+            except (ValueError, TypeError):
                 if(len(self.times) > 4):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
     
     def write_file(self):
         file = open(self.file, 'w')
-        return_str = f'{self.name}\nS: {str(float(self.PB_single))}\nA: {str(self.PB_avg5)}\nPB Scramble: {self.PB_scramble}'
+        return_str = f'{self.name}\nS: {str(self.PB_single)}\nA: {str(self.PB_avg5)}\nPB Scramble: {self.PB_scramble}'
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):

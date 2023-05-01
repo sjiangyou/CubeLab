@@ -3,6 +3,7 @@ Download the zip file under the Code menu.
 Move the whole download somewhere within your Documents folder.
 Create text files for each event you want to save times for.
 It is recommended that the file names be short. 
+Files should be formatted similar to the example file (example.txt) and use .txt extension.
 Place these files in the same folder as the download.
 Change the configuration settings to your liking.
 Run the executable file.
@@ -15,7 +16,7 @@ The color of the background and text can be changed by typing in RGB values, onl
 While running:
 To use the program, type in the file name to save the results to, then the puzzle type.
 Press the Enter key on the keyboard to generate new scrambles.
-Ensure that any files you save to are inside the same folder as the program.
-Files should be formatted similar to the example file (example.txt) and use .txt extension.
-Type in a time and press Enter while the cursor is on the time input to save the time. 
+Type in a time and press Enter while the cursor is on the time input to save the time.
+Times should be formatted like XX:XX:XX.XX or XXXX.XX.
 Averages are automatically calculated at the bottom of the screen. 
+Note that all times displayed and saved are formatted like XXXX.XX
