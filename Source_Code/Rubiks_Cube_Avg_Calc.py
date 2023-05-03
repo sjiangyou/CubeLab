@@ -97,10 +97,16 @@ class Computer:
             return('NA')
         return(round(avg_time, 2))
     
-    def convert_time(self,time):
+    def convert_time(self, time, fast):
         time = str(time)
-        time = time.split(':')
-        time.reverse()
+        try:
+            time = time.split(':')
+            time.reverse()
+        except:
+            time.reverse()
+            indicies = [i for i in range(len(time)) if i % 2 == 0]
+            indicies.remove(2)
+            time = [time[i:j] for i,j in zip(indicies, indicies[1:]+[None])]
         time = [float(u) for u in time]
         for j in range(len(time)):
             time[j] *= (60 ** j)
