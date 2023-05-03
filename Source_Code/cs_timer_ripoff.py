@@ -47,6 +47,12 @@ class App:
                     if(event.key == K_BACKSPACE and len(self.active_text.text) > self.active_text.init_len):
                         self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_RETURN):
+                        App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
+                        try:
+                            App.computer.read_file()
+                            new_scramble = App.computer.generate_scramble()
+                        except:
+                            new_scramble = 'Failed to read file'
                         if(self.active_text == App.timein):
                             try:prev_scramble = App.computer.scramble
                             except AttributeError:prev_scramble = ''
@@ -64,13 +70,6 @@ class App:
                             App.computer.write_file()
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
-                        else:
-                            App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
-                            try:
-                                App.computer.read_file()
-                                new_scramble = App.computer.generate_scramble()
-                            except:
-                                new_scramble = 'Failed to read file'
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
                         indicies = App.scdisplay[0].rollover()
                         count = 0
