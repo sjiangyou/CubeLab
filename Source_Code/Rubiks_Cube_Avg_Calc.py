@@ -83,9 +83,7 @@ class Computer:
         return return_value
     
     def mid_avg(self, length):
-        for i, time in enumerate(self.times):
-            time = self.convert_time(time)
-            self.times[i] = time
+        self.times = [time for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
@@ -105,9 +103,9 @@ class Computer:
         for j in range(len(time)):
             time[j] *= (60 ** j)
         time = sum(time)
-        return time
+        return str(time)
 
-    def convert_fasttime(time):
+    def convert_fasttime(self, time):
         if not time.isdigit():
             return str(time)
         else:
@@ -117,11 +115,12 @@ class Computer:
             final_time = ''
             for i, elem in enumerate(splits):
                 final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
-            return final_time[:-1]
+            return self.convert_time(final_time[:-1])
 
     def run(self, new_time):
         if(new_time.replace('.', '').replace(':','').isdigit()):
-            self.times.insert(0, self.convert_fasttime(new_time))
+            new_time = self.convert_fasttime(new_time)
+            self.times.insert(0, new_time)
             current_ao5 = self.mid_avg(5)
             try:
                 if(self.convert_time(new_time) < float(self.PB_single)):
