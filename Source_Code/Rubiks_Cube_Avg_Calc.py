@@ -83,7 +83,7 @@ class Computer:
         return return_value
     
     def mid_avg(self, length):
-        self.times = [time for time in self.times]
+        self.times = [float(time) for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
@@ -103,19 +103,20 @@ class Computer:
         for j in range(len(time)):
             time[j] *= (60 ** j)
         time = sum(time)
-        return str(time)
+        return time
 
     def convert_fasttime(self, time):
         if not time.isdigit():
-            return str(time)
+            return str(self.convert_time(time))
         else:
             indicies = [i for i in range(len(time)) if i % 2 == len(time) % 2]
-            indicies.insert(0, 0)
+            if len(time) % 2 != 0:indicies.insert(0, 0)
             splits = [time[i:j] for i,j in zip(indicies, indicies[1:]+[None])] 
             final_time = ''
             for i, elem in enumerate(splits):
                 final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
-            return self.convert_time(final_time[:-1])
+            
+            return str(self.convert_time(final_time[:-1]))
 
     def run(self, new_time):
         if(new_time.replace('.', '').replace(':','').isdigit()):
@@ -123,7 +124,7 @@ class Computer:
             self.times.insert(0, new_time)
             current_ao5 = self.mid_avg(5)
             try:
-                if(self.convert_time(new_time) < float(self.PB_single)):
+                if(float(new_time) < float(self.PB_single)):
                     self.PB_single = new_time
                     self.single = True
             except (ValueError, TypeError):
