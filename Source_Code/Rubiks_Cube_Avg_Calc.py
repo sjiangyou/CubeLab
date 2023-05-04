@@ -97,7 +97,7 @@ class Computer:
             return('NA')
         return(round(avg_time, 2))
     
-    def convert_time(self,time):
+    def convert_time(self, time):
         time = str(time)
         time = time.split(':')
         time.reverse()
@@ -107,9 +107,21 @@ class Computer:
         time = sum(time)
         return time
 
+    def convert_fasttime(time):
+        if not time.isdigit():
+            return str(time)
+        else:
+            indicies = [i for i in range(len(time)) if i % 2 == len(time) % 2]
+            indicies.insert(0, 0)
+            splits = [time[i:j] for i,j in zip(indicies, indicies[1:]+[None])] 
+            final_time = ''
+            for i, elem in enumerate(splits):
+                final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
+            return final_time[:-1]
+
     def run(self, new_time):
         if(new_time.replace('.', '').replace(':','').isdigit()):
-            self.times.insert(0, str(new_time))
+            self.times.insert(0, self.convert_fasttime(new_time))
             current_ao5 = self.mid_avg(5)
             try:
                 if(self.convert_time(new_time) < float(self.PB_single)):
