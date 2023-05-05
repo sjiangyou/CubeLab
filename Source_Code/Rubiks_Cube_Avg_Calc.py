@@ -115,7 +115,6 @@ class Computer:
             final_time = ''
             for i, elem in enumerate(splits):
                 final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
-            
             return str(self.convert_time(final_time[:-1]))
 
     def run(self, new_time):
@@ -127,17 +126,18 @@ class Computer:
                 if(float(new_time) < float(self.PB_single)):
                     self.PB_single = new_time
                     self.single = True
-            except (ValueError, TypeError):
+            except(ValueError, TypeError):
                 self.PB_single = new_time
                 self.single = True
             try:
                 if(current_ao5 < float(self.PB_avg5)):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
-            except (ValueError, TypeError):
+            except(ValueError, TypeError):
                 if(len(self.times) > 4):
                     self.PB_avg5 = current_ao5
                     self.ao5 = True
+            self.write_file()
     
     def write_file(self):
         file = open(self.file, 'w')

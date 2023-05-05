@@ -67,7 +67,6 @@ class App:
                                 App.computer.ao5 = False
                             for text in App.avdisplay:
                                 text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
-                            App.computer.write_file()
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
