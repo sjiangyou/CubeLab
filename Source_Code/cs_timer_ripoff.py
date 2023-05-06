@@ -62,9 +62,11 @@ class App:
                                 self.alerts.text += 'New PB Single! '
                                 App.computer.PB_scramble = prev_scramble
                                 App.computer.single = False
+                                App.computer.PB_single = App.computer.times[0]
                             if(App.computer.ao5):
                                 self.alerts.text += 'New PB AO5!'
                                 App.computer.ao5 = False
+                                App.computer.PB_avg5 = App.computer.mid_avg(5)
                             for text in App.avdisplay:
                                 text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
                             new_scramble = App.computer.generate_scramble()
