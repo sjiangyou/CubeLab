@@ -86,12 +86,9 @@ class Computer:
         lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
-        if(len(updated_times_lst) < length - 2):
+        if(len(updated_times_lst) < length - 2 or len(updated_times_lst) == 0):
             return('NA')
-        try:
-            avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
-        except ZeroDivisionError:
-            return('NA')
+        avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
         return(round(avg_time, 2))
     
     def convert_time(self, time):
