@@ -59,7 +59,6 @@ class Computer:
         layer_modifiers[len(layer_modifiers) - 1] = ''
         return_value = ''
         prev_moves = []
-        
         while(len(scramble) < length):
             new_move = (moves[random.randint(0, len(moves) - 1)], rotation_modifiers[random.randint(0, 2)], layer_modifiers[random.randint(0, len(layer_modifiers) - 1)])
             try:
@@ -122,21 +121,10 @@ class Computer:
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
             current_ao5 = self.mid_avg(5)
-            try:
-                if(float(new_time) < float(self.PB_single)):
-                    self.PB_single = new_time
-                    self.single = True
-            except(ValueError, TypeError):
-                self.PB_single = new_time
+            if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
-            try:
-                if(current_ao5 < float(self.PB_avg5)):
-                    self.PB_avg5 = current_ao5
-                    self.ao5 = True
-            except(ValueError, TypeError):
-                if(len(self.times) > 4):
-                    self.PB_avg5 = current_ao5
-                    self.ao5 = True
+            if((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5) and current_ao5 < float(self.PB_avg5)):
+                self.ao5 = True
             self.write_file()
     
     def write_file(self):
