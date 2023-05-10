@@ -82,13 +82,15 @@ class Computer:
         return return_value
     
     def mid_avg(self, length):
-        self.times = [float(time) for time in self.times]
+        self.times = [float(time) if time != 'DNF' else float('inf') for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
             return('NA')
         avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
+        if(avg_time == float('inf')):
+            return('DNF')
         return(round(avg_time, 2))
     
     def convert_time(self, time):
