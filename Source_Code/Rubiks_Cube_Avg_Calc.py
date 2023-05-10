@@ -130,7 +130,7 @@ class Computer:
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):
-            time = str(self.convert_time(time))
+            time = str(round(self.convert_time(time), 2))
             while(len(time[time.find('.'):]) < 3):
                 time += '0'
             return_str += time
