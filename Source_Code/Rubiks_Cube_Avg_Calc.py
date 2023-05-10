@@ -82,16 +82,20 @@ class Computer:
         return return_value
     
     def mid_avg(self, length):
-        self.times = [float(time) for time in self.times]
+        self.times = [float(time) if time != 'DNF' else float('inf') for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
             return('NA')
         avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
+        if(avg_time == float('inf')):
+            return('DNF')
         return(round(avg_time, 2))
     
     def convert_time(self, time):
+        if(time == 'DNF'):
+            return float('inf')
         time = str(time)
         time = time.split(':')
         time.reverse()
@@ -114,14 +118,16 @@ class Computer:
             return str(self.convert_time(final_time[:-1]))
 
     def run(self, new_time):
-        if(new_time.replace('.', '').replace(':','').isdigit()):
+        if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
             current_ao5 = self.mid_avg(5)
             if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
+                self.PB_single = new_time
             if((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5) and current_ao5 < float(self.PB_avg5)):
                 self.ao5 = True
+                self.PB_avg5 = current_ao5
             self.write_file()
     
     def write_file(self):
@@ -130,8 +136,10 @@ class Computer:
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):
-            time = str(self.convert_time(time))
-            while(len(time[time.find('.'):]) < 3):
+            time = str(round(self.convert_time(time), 2))
+            if(time == 'inf'):
+                time = 'DNF'
+            if(time.find('.') == len(time) - 2):
                 time += '0'
             return_str += time
             if(i == len(self.times) - 1):
