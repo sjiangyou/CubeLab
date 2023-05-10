@@ -135,6 +135,8 @@ class Computer:
             return_str += '\n'
         for i, time in enumerate(self.times):
             time = str(round(self.convert_time(time), 2))
+            if(time == 'inf'):
+                time = 'DNF'
             if(time.find('.') == len(time) - 2):
                 time += '0'
             return_str += time
