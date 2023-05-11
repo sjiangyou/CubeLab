@@ -17,6 +17,6 @@ While running:
 To use the program, type in the file name to save the results to, then the puzzle type.
 Press the Enter key on the keyboard to generate new scrambles.
 Type in a time and press Enter while the cursor is on the time input to save the time.
-Times should be formatted like XX:XX:XX.XX or XXXX.XX.
+Times should be formatted like XX:XX:XX.XX, XXXX.XX, or MMSSXX.
 Averages are automatically calculated at the bottom of the screen. 
 Note that all times displayed and saved are formatted like XXXX.XX
