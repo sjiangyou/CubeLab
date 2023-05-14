@@ -51,8 +51,13 @@ class App:
                         try:
                             App.computer.read_file()
                             new_scramble = App.computer.generate_scramble()
-                        except:
-                            new_scramble = 'Failed to read file'
+                        except FileNotFoundError:
+                            try:newfile = open(str(App.computer.file), 'x')
+                            except FileExistsError:new_scramble = 'Failed to read.'
+                            else:
+                                newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
+                                newfile.close()
+                                new_scramble = 'Created new file.'
                         if(self.active_text == App.timein):
                             try:prev_scramble = App.computer.scramble
                             except AttributeError:prev_scramble = ''
@@ -121,7 +126,7 @@ class Textbox:
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
         self.cursor = Rect(self.rect.topright, (3, self.rect.height))
-        self.rect = Rect(self.pos, (pygame.display.Info().current_w, 50))
+        self.rect = Rect(self.pos, (pygame.display.Info().current_w, App.main_fontsize))
     
     def draw(self):
         App.screen.blit(self.img, self.rect)
