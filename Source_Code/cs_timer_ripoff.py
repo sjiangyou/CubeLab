@@ -51,7 +51,7 @@ class App:
                         try:
                             App.computer.read_file()
                             new_scramble = App.computer.generate_scramble()
-                        except FileNotFoundError:
+                        except(FileNotFoundError, IndexError):
                             try:newfile = open(str(App.computer.file), 'x')
                             except FileExistsError:new_scramble = 'Failed to read.'
                             else:
