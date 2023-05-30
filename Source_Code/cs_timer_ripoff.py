@@ -26,6 +26,9 @@ class App:
         self.averages = user_settings[0].split(', ')
         App.main_fontsize = int(user_settings[1])
         App.other_fontsize = int(user_settings[2])
+        fonts = open('fontsizes.txt', 'r')
+        fonts = fonts.read().split('\n')
+        App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(user_settings[3]), self.extract_color(user_settings[4])
     
     def extract_color(self, rgb):
@@ -126,7 +129,7 @@ class Textbox:
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
         self.cursor = Rect(self.rect.topright, (3, self.rect.height))
-        self.rect = Rect(self.pos, (pygame.display.Info().current_w, App.main_fontsize))
+        self.rect = Rect(self.pos, (pygame.display.Info().current_w, self.fontsize))
     
     def draw(self):
         App.screen.blit(self.img, self.rect)
@@ -137,7 +140,7 @@ class Textbox:
     def rollover(self):
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
-        high = (pygame.display.get_surface().get_width() // (self.fontsize)) - 1
+        high = (pygame.display.get_surface().get_width() // (App.fonts[self.fontsize][0])) - 1
         low = high - 3
         while possible_splits:
             try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
