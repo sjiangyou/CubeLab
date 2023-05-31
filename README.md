@@ -1,3 +1,5 @@
+This program only works on MacOS!
+
 Before using the program:
 Download the zip file under the Code menu. 
 Move the whole download somewhere within your currently active Documents folder.
