@@ -68,7 +68,6 @@ class App:
                             self.alerts.text = ''
                             if(App.computer.single):
                                 self.alerts.text += 'New PB Single! '
-                                App.computer.PB_scramble = prev_scramble
                                 App.computer.single = False
                             if(App.computer.ao5):
                                 self.alerts.text += 'New PB AO5!'
