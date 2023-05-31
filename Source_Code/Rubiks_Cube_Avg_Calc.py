@@ -121,11 +121,11 @@ class Computer:
         if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
-            current_ao5 = self.mid_avg(5)
+            current_ao5 = self.convert_time(self.mid_avg(5))
             if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
                 self.PB_single = new_time
-            if((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5) and current_ao5 < float(self.PB_avg5)):
+            if(((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5)) and (current_ao5 < float(self.PB_avg5))):
                 self.ao5 = True
                 self.PB_avg5 = current_ao5
             self.write_file()
