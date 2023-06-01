@@ -13,12 +13,8 @@ class Computer:
         text = text.split('\n')
         name = text[0]
         PB_avg5, PB_single = text[2][3:], text[1][3:]
-        if(self.puzzle[0] == 'M'):
-            PB_scramble = f'{text[3][13:]}\n{text[4]}\n{text[5]}\n{text[6]}\n{text[7]}\n{text[8]}\n{text[9]}'
-            times_lst = text[10:]
-        else:
-            PB_scramble = text[3][13:]
-            times_lst = text[4:]
+        PB_scramble = text[3][13:]
+        times_lst = text[4:]
         if(PB_single == None):
             PB_avg5 = None
         for i, elem in enumerate(times_lst):
@@ -96,6 +92,8 @@ class Computer:
     def convert_time(self, time):
         if(time == 'DNF'):
             return float('inf')
+        if(time == 'NA'):
+            return 'NA'
         time = str(time)
         time = time.split(':')
         time.reverse()
