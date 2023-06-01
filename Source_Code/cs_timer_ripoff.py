@@ -81,7 +81,7 @@ class App:
                         count = 0
                         for num, loc in enumerate(indicies[:-1]):
                             if(count + 2 > len(App.scdisplay)):
-                                App.scdisplay.append(Textbox(pos = (0, (self.main_fontsize * 3) + (self.other_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = 35))
+                                App.scdisplay.append(Textbox(pos = (0, (self.main_fontsize * 3) + (self.other_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = App.other_fontsize))
                             else:
                                 App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
                             count += 1
