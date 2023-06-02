@@ -66,14 +66,17 @@ class Computer:
             for move in scramble:
                 prev_moves.append(move[0])
             prev_moves = prev_moves[-2:]
+        print(scramble)
         if(self.puzzle[0] == 'M'):
             print('Mega')
             for (i, move) in enumerate(scramble):
                 if(i % 11 == 10):
                     scramble[i] = ('U', rotation_modifiers[random.randint(2, 3)], '')
+        print(scramble)
         for move in scramble:
             return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]} '
         self.scramble = return_value
+        print(return_value)
         return return_value
     
     def mid_avg(self, length):
