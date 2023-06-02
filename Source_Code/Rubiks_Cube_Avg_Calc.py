@@ -67,7 +67,6 @@ class Computer:
                 prev_moves.append(move[0])
             prev_moves = prev_moves[-2:]
         if(self.puzzle[0] == 'M'):
-            print('Mega')
             for (i, move) in enumerate(scramble):
                 if(i % 11 == 10):
                     scramble[i] = ('U', rotation_modifiers[random.randint(2, 3)], '')
