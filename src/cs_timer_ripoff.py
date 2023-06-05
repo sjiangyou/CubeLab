@@ -62,8 +62,6 @@ class App:
                                 newfile.close()
                                 new_scramble = 'Created new file.'
                         if(self.active_text == App.timein):
-                            try:prev_scramble = App.computer.scramble
-                            except AttributeError:prev_scramble = ''
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
                             if(App.computer.single):
