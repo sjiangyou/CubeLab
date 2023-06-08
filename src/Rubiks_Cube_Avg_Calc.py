@@ -122,7 +122,7 @@ class Computer:
                 self.single = True
                 self.PB_scramble = self.scramble
                 self.PB_single = new_time
-            if(((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5)) and (current_ao5 < float(self.PB_avg5))):
+            if((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5 and current_ao5 < float(self.PB_avg5))):
                 self.ao5 = True
                 self.PB_avg5 = current_ao5
             self.write_file()
