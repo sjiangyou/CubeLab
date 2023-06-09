@@ -49,7 +49,7 @@ class Computer:
             if(self.puzzle[0] == 'P'):
                 moves = ['U', 'L', 'R', 'B', 'u', 'l', 'r', 'b']
             elif(self.puzzle.find('1') == -1):
-                moves = ['F', 'L', 'R', 'B']
+                moves = ['U', 'L', 'R', 'B']
             else:
                 return 'Square-1 is not supported.'
         layer_modifiers[0] = ''
