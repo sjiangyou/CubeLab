@@ -24,7 +24,8 @@ class Computer:
         for lst in times_lst:
             for t in lst:
                 return_lst.append(t)
-        self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = return_lst, name, PB_single, PB_avg5, PB_scramble
+        self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = \
+        return_lst, name, PB_single, PB_avg5, PB_scramble
         file.close()
     
     def generate_scramble(self):
@@ -44,19 +45,21 @@ class Computer:
             length = 77
         else:
             length = 30
+            del rotation_modifiers[1]
             if(self.puzzle[0] == 'P'):
                 moves = ['U', 'L', 'R', 'B', 'u', 'l', 'r', 'b']
-                rotation_modifiers[1] = ''
             elif(self.puzzle.find('1') == -1):
                 moves = ['F', 'L', 'R', 'B']
             else:
-                return 'No scramble available'
+                return 'Square-1 is not supported.'
         layer_modifiers[0] = ''
         layer_modifiers[len(layer_modifiers) - 1] = ''
         return_value = ''
         prev_moves = []
         while(len(scramble) < length):
-            new_move = (moves[random.randint(0, len(moves) - 1)], rotation_modifiers[random.randint(0, 2)], layer_modifiers[random.randint(0, len(layer_modifiers) - 1)])
+            new_move = (moves[random.randint(0, len(moves) - 1)], 
+                        rotation_modifiers[random.randint(0, len(rotation_modifiers) - 1)],
+                        layer_modifiers[random.randint(0, len(layer_modifiers) - 1)])
             try:
                 prev_moves.index(new_move[0])
                 continue
