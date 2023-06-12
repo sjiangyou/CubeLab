@@ -1,4 +1,5 @@
 from Rubiks_Cube_Avg_Calc import Computer
+from Find_User_Dir import *
 import pygame
 from pygame.locals import *
 import time
@@ -148,16 +149,11 @@ class Textbox:
             high += delta_index
         return return_indicies[1:]
 
-def find(name, path):
-    for root, dirs, files in os.walk(path):
-        if name in files:
-            return os.path.join(root, '')
-
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
-    os.chdir(find('example.txt', os.path.expanduser('~')))
+    os.chdir(find('example.txt'))
     print(os.getcwd())
     user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
     App().run()
