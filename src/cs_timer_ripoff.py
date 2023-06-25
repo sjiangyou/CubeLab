@@ -22,6 +22,7 @@ class App:
         App.computer = Computer('', '')
         App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 25), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
+        App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = str(i), edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
     
     def apply_user_settings(self):
         self.averages = user_settings[0].split(', ')
@@ -73,6 +74,8 @@ class App:
                                 App.computer.ao5 = False
                             for text in App.avdisplay:
                                 text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
+                            for text in App.previous_solves:
+                                pass
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
