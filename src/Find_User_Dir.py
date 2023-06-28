@@ -1,9 +1,9 @@
 import os
 import platform
 
-def find(name):
+def find(folder):
     for root, dirs, files in os.walk(get_user_dir()):
-        if name in files:
+        if root.endswith(folder):
             return os.path.join(root, '')
         
 def get_user_dir():
