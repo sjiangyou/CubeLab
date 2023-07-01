@@ -49,8 +49,10 @@ class App:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT): self.running = False
                 if(event.type == KEYDOWN):
-                    if(event.key == K_BACKSPACE and len(self.active_text.text) > self.active_text.init_len):
-                        self.active_text.text = self.active_text.text[:-1]
+                    if(event.key == K_BACKSPACE):
+                        if(len(self.active_text.text) > self.active_text.init_len): self.active_text.text = self.active_text.text[:-1]
+                    elif(event.key == K_TAB):
+                        App.active_text = App.all_text[(App.all_text.index(App.active_text) + 1) % 3]
                     elif(event.key == K_RETURN):
                         App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
                         try:
