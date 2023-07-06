@@ -65,6 +65,12 @@ class App:
                                 newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
                                 newfile.close()
                                 new_scramble = 'Created new file.'
+                                print(new_scramble)
+                        for text in App.avdisplay:
+                            text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
+                        for idx, text in enumerate(App.previous_solves):
+                            try:text.text = str(App.computer.times[idx])
+                            except IndexError: continue
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
@@ -76,10 +82,6 @@ class App:
                                 App.computer.ao5 = False
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
-                        for text in App.avdisplay:
-                            text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
-                        for idx, text in enumerate(App.previous_solves):
-                            text.text = str(App.computer.times[idx])
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
                         indicies = App.scdisplay[0].rollover()
                         count = 0

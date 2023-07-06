@@ -4,6 +4,7 @@ class Computer:
     def __init__(self, file, puzzle):
         self.file = file
         self.puzzle = puzzle
+        self.times = []
         self.single = False
         self.ao5 = False
     
@@ -79,6 +80,8 @@ class Computer:
         return return_value
     
     def mid_avg(self, length):
+        if(self.times == []):
+            return('NA')
         self.times = [float(time) if time != 'DNF' else float('inf') for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
