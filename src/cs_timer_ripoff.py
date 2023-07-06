@@ -60,12 +60,11 @@ class App:
                             new_scramble = App.computer.generate_scramble()
                         except(FileNotFoundError, IndexError):
                             try:newfile = open(str(App.computer.file), 'x')
-                            except FileExistsError:new_scramble = 'Failed to read.'
+                            except FileExistsError:new_scramble = 'Failed to read. '
                             else:
                                 newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
                                 newfile.close()
-                                new_scramble = 'Created new file.'
-                                print(new_scramble)
+                                new_scramble = 'Created new file. '
                         for text in App.avdisplay:
                             text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
                         for idx, text in enumerate(App.previous_solves):
