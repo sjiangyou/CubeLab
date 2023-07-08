@@ -11,7 +11,8 @@ Change the configuration settings to your liking.
 Run the executable file.
 
 Configuration Settings:
-The averages displayed can be changed by listing up to 3 of them on the first line.
+The averages or means displayed can be changed by listing up to 4 of them on the first line.
+Note that averages start with "a" or "A" and means start with "m" or "M".
 Font type and sizes can be changed on their respective lines.
 The color of the background and text can be changed by typing in RGB values, only R,G,B is acceptable. 
 

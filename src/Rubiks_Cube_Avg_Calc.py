@@ -79,12 +79,25 @@ class Computer:
         self.scramble = return_value
         return return_value
     
-    def mid_avg(self, length):
+    def prepare_times(self, length):
         if(self.times == []):
             return('NA')
         self.times = [float(time) if time != 'DNF' else float('inf') for time in self.times]
         lst_copy = list(self.times[:length])
         lst_copy.sort()
+        return lst_copy
+    
+    def do_mean(self, length):
+        lst_copy = self.prepare_times(length)
+        if(len(lst_copy) < length):
+            return('NA')
+        mean_time = (sum(lst_copy))/(len(lst_copy))
+        if(mean_time == float('inf')):
+            return('DNF')
+        return(round(mean_time, 2))
+    
+    def do_avg(self, length):
+        lst_copy = self.prepare_times(length)
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
             return('NA')
@@ -123,7 +136,7 @@ class Computer:
         if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
-            current_ao5 = self.convert_time(self.mid_avg(5))
+            current_ao5 = self.convert_time(self.do_avg(5))
             if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
                 self.PB_scramble = self.scramble

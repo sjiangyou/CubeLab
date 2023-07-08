@@ -1,4 +1,4 @@
-from Rubiks_Cube_Avg_Calc import Computer
+from Rubiks_Cube_Avg_Calc import *
 from Find_User_Dir import *
 import pygame
 from pygame.locals import *
@@ -79,7 +79,10 @@ class App:
                             App.timein.text = App.timein.text[:6]
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
                         for text in App.avdisplay:
-                            text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.mid_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
+                            if(text.text[0].upper() == 'A'):
+                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.do_avg(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
+                            if(text.text[0].upper() == 'M'):
+                                text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.do_mean(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
                         for idx, text in enumerate(App.previous_solves):
                             try:text.text = str(App.computer.times[idx])
                             except IndexError: continue

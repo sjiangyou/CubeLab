@@ -9,3 +9,7 @@ dist/
 *.spec
 .DS_Store
 env/
+bin/
+lib/
+include/
+pyvenv.cfg
