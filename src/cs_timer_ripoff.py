@@ -20,7 +20,7 @@ class App:
         App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = App.main_fontsize)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 25), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
+        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - App.other_fontsize), text = (av + ': '), edit = False, fontsize = App.other_fontsize) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
     
