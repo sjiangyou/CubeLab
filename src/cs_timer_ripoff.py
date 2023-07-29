@@ -60,11 +60,11 @@ class App:
                             new_scramble = App.computer.generate_scramble()
                         except(FileNotFoundError, IndexError):
                             try:newfile = open(str(App.computer.file), 'x')
-                            except FileExistsError:new_scramble = 'Failed to read.'
+                            except FileExistsError:new_scramble = 'Invalid Puzzle. '
                             else:
                                 newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
                                 newfile.close()
-                                new_scramble = 'Created new file.'
+                                new_scramble = 'Created new file. '
                                 print(new_scramble)
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
