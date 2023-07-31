@@ -1,8 +1,7 @@
-This program only works on MacOS!
+This program has only been compiled on MacOS X.
 
 Before using the program:
 Download the zip file under the Code menu. 
-Move the whole download somewhere within your currently active Documents folder.
 Create text files for each event you want to save times for.
 It is recommended that the file names be short. 
 Files should be formatted similar to the example file (example.txt) and use .txt extension.
