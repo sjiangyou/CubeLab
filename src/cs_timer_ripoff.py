@@ -20,9 +20,10 @@ class App:
         App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = App.main_fontsize)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 25), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
+        App.avdisplay = [Textbox(pos = (round(13.5 * App.fonts[App.other_fontsize - 20][0] * i), pygame.display.get_surface().get_height() - App.other_fontsize + 20), text = (av + ': '), edit = False, fontsize = App.other_fontsize - 20) for (i, av) in enumerate(self.averages)]
         App.active_text = App.all_text[0]
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
+        #App.exitbutton = Button(pos = (pygame.display.get_surface().get_width() // 2, pygame.display.get_surface().get_height() // 2), text = 'Exit', fontsize = App.main_fontsize)
     
     def apply_user_settings(self):
         self.averages = user_settings[0].split(', ')
@@ -159,11 +160,14 @@ class Textbox:
             high += delta_index
         return return_indicies[1:]
 
+class Button(Textbox):
+    def __init__(self, pos, text, fontsize):
+        Textbox.__init__(self, pos, text, False, fontsize)
+
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
     os.chdir(find('Timer_Project_Files'))
-    print(os.getcwd())
     user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
     App().run()
