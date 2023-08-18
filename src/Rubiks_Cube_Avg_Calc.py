@@ -43,7 +43,7 @@ class Computer:
         elif(self.puzzle[0] == 'M'):
             moves = ['--', '-+', '+-', '++']
             rotation_modifiers = ['', '', '']
-            length = 77
+            length = 42
         else:
             length = 30
             del rotation_modifiers[1]
@@ -72,7 +72,7 @@ class Computer:
             prev_moves = prev_moves[-2:]
         if(self.puzzle[0] == 'M'):
             for (i, move) in enumerate(scramble):
-                if(i % 11 == 10):
+                if(i % 6 == 5):
                     scramble[i] = ('U', random.choice(('', '\'')), '')
         for move in scramble:
             return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]} '
