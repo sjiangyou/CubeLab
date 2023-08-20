@@ -2,7 +2,7 @@ Averages displayed:
 AO5, AO12, AO20
 Main Fontsize: 
 50
-Scramble Fontsize:
+Scramble and Average Fontsize:
 35
 Text color: 
 255,255,255

@@ -22,3 +22,6 @@ Type in a time and press Enter while the cursor is on the time input to save the
 Times should be formatted like HH:MM:SS.XX, XXXX.XX, or MMSSXX.
 Averages are automatically calculated at the bottom of the screen. 
 Note that all times displayed and saved are formatted like XXXX.XX
+
+To exit:
+Click on the exit button.

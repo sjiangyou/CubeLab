@@ -18,11 +18,12 @@ class App:
         App.eventin = Textbox(pos = (0, App.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = App.main_fontsize)
         App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
         App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
-        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - 100), text = '', edit = False, fontsize = App.main_fontsize)
+        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - App.main_fontsize), text = '', edit = False, fontsize = App.main_fontsize)
         App.computer = Computer('', '')
-        App.avdisplay = [Textbox(pos = (200 * i, pygame.display.get_surface().get_height() - 25), text = (av + ': '), edit = False, fontsize = 25) for (i, av) in enumerate(self.averages)]
-        App.active_text = App.all_text[0]
+        App.avdisplay = [Textbox(pos = (round(13.5 * App.fonts[App.other_fontsize - 20][0] * i), pygame.display.get_surface().get_height() - App.other_fontsize + 20), text = (av + ': '), edit = False, fontsize = App.other_fontsize - 20) for (i, av) in enumerate(self.averages)]
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
+        App.exitbutton = Button(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - 2 * App.main_fontsize), text = 'Exit ', fontsize = App.main_fontsize)
+        App.active_text = App.all_text[0]
     
     def apply_user_settings(self):
         self.averages = user_settings[0].split(', ')
@@ -40,14 +41,14 @@ class App:
     
     def change_active(self, mouse):
         for text in App.all_text:
-            if(pygame.Rect.collidepoint(text.rect, mouse) and (text.edit)):
+            if(pygame.Rect.collidepoint(text.rect, mouse) and (text.edit or type(text) == Button)):
                 App.active_text = text
                 break
     
     def run(self):
         while self.running:
             for event in pygame.event.get():
-                if(event.type == pygame.QUIT): self.running = False
+                if(event.type == pygame.QUIT or self.active_text == App.exitbutton): self.running = False
                 if(event.type == KEYDOWN):
                     if(event.key == K_BACKSPACE):
                         if(len(self.active_text.text) > self.active_text.init_len): self.active_text.text = self.active_text.text[:-1]
@@ -65,7 +66,6 @@ class App:
                                 newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
                                 newfile.close()
                                 new_scramble = 'Created new file. '
-                                print(new_scramble)
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
@@ -137,7 +137,7 @@ class Textbox:
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
         self.cursor = Rect(self.rect.topright, (3, self.rect.height))
-        self.rect = Rect(self.pos, (pygame.display.Info().current_w, self.fontsize))
+        self.rect = Rect(self.pos, (pygame.display.get_surface().get_width(), self.fontsize))
     
     def draw(self):
         App.screen.blit(self.img, self.rect)
@@ -159,11 +159,14 @@ class Textbox:
             high += delta_index
         return return_indicies[1:]
 
+class Button(Textbox):
+    def __init__(self, pos, text, fontsize):
+        Textbox.__init__(self, pos, text, False, fontsize)
+
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
     os.chdir(find('Timer_Project_Files'))
-    print(os.getcwd())
     user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
     App().run()
