@@ -66,9 +66,7 @@ class Computer:
                 continue
             except (ValueError, IndexError):pass
             scramble.append(new_move)
-            prev_moves = []
-            for move in scramble:
-                prev_moves.append(move[0])
+            prev_moves.append(new_move[0])
             prev_moves = prev_moves[-2:]
         if(self.puzzle[0] == 'M'):
             for (i, move) in enumerate(scramble):
