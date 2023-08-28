@@ -66,7 +66,6 @@ class App:
                                 newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
                                 newfile.close()
                                 new_scramble = 'Created new file. '
-                                print(new_scramble)
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
