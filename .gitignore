@@ -3,6 +3,7 @@ test.py
 !config.txt
 !example.txt
 !fontsizes.txt
+!requirements.txt
 __pycache__/
 build/
 dist/

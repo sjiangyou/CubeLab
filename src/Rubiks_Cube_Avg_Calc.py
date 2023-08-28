@@ -65,6 +65,10 @@ class Computer:
                 prev_moves.index(new_move[0])
                 continue
             except (ValueError, IndexError):pass
+            if type(new_move[2]) == int:
+                new_move = (new_move[0] + 'w', new_move[1], new_move[2])
+                if new_move[2] == 2:
+                    new_move = (new_move[0], new_move[1], '')
             scramble.append(new_move)
             prev_moves.append(new_move[0])
             prev_moves = prev_moves[-2:]
