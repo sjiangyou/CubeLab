@@ -62,7 +62,7 @@ class Computer:
                         rotation_modifiers[random.randint(0, len(rotation_modifiers) - 1)],
                         layer_modifiers[random.randint(0, len(layer_modifiers) - 1)])
             try:
-                prev_moves.index(new_move[0])
+                prev_moves.index(new_move[0][0])
                 continue
             except (ValueError, IndexError):pass
             if type(new_move[2]) == int:
@@ -70,7 +70,7 @@ class Computer:
                 if new_move[2] == 2:
                     new_move = (new_move[0], new_move[1], '')
             scramble.append(new_move)
-            prev_moves.append(new_move[0])
+            prev_moves.append(new_move[0][0])
             prev_moves = prev_moves[-2:]
         if(self.puzzle[0] == 'M'):
             for (i, move) in enumerate(scramble):
