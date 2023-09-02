@@ -11,7 +11,7 @@ if pwd | grep -q "compile"; then
 fi
 
 cd src
-python3 -m PyInstaller --onefile --noconfirm --name=cs_timer_ripoff_MacOS --clean --distpath=../ cs_timer_ripoff.py
+python3 -m PyInstaller --onefile --noconfirm --name=cs_timer_ripoff_MacOS_ARM --clean --distpath=../ cs_timer_ripoff.py
 for f in *.spec; do
     rm $f
 done
