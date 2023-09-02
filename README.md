@@ -1,4 +1,4 @@
-This program has only been compiled on MacOS X.
+This program has only been compiled on MacOS X for both Intel and M1/M2.
 
 Before using the program:
 Download the zip file under the Code menu. 
@@ -7,7 +7,7 @@ It is recommended that the file names be short.
 Files should be formatted similar to the example file (example.txt) and use .txt extension.
 Place these files in the same folder as the download.
 Change the configuration settings to your liking.
-Run the executable file.
+Run the executable file corresponding to your operating system.
 
 Configuration Settings:
 The averages or means displayed can be changed by listing up to 4 of them on the first line.
