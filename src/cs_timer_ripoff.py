@@ -14,7 +14,7 @@ class App:
         self.apply_user_settings()
         App.screen.fill(App.backgroundcolor)
         self.running = True
-        App.filein = Textbox(pos = (0, 0), text = 'File: ', edit = True, fontsize = App.main_fontsize)
+        App.filein = Textbox(pos = (0, 0), text = 'Session: ', edit = True, fontsize = App.main_fontsize)
         App.eventin = Textbox(pos = (0, App.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = App.main_fontsize)
         App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
         App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
@@ -55,7 +55,7 @@ class App:
                     elif(event.key == K_TAB):
                         App.active_text = App.all_text[(App.all_text.index(App.active_text) + 1) % 3]
                     elif(event.key == K_RETURN):
-                        App.computer = Computer(App.filein.text[6:], App.eventin.text[8:])
+                        App.computer = Computer(App.filein.text[(App.filein.init_len):], App.eventin.text[(App.eventin.init_len):])
                         try:
                             App.computer.read_file()
                             new_scramble = App.computer.generate_scramble()
