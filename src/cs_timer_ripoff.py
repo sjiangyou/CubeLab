@@ -107,8 +107,8 @@ class App:
             self.screen.fill(App.backgroundcolor)
             for text in App.all_text:
                 text.draw()
-            if time.time() % 1 > 0.5:
-                pygame.draw.rect(self.screen, Color('white'), App.active_text.cursor)
+            if(time.time() % 1 > 0.5 and type(App.active_text) != Button):
+                pygame.draw.rect(self.screen, App.textcolor, App.active_text.cursor)
             pygame.display.update()
             pygame.display.flip()
 
@@ -162,6 +162,14 @@ class Textbox:
 class Button(Textbox):
     def __init__(self, pos, text, fontsize):
         Textbox.__init__(self, pos, text, False, fontsize)
+        
+    def render_conv(self):
+        try:
+            if(self.text[0] == ' '):self.text = self.text[1:]
+        except:pass
+        self.img = self.font.render(self.text, True, self.fontcolor)
+        self.rect = self.img.get_rect()
+        self.rect.topleft = self.pos
 
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])

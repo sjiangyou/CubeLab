@@ -18,13 +18,14 @@ class Computer:
         times_lst = text[4:]
         if(PB_single == None):
             PB_avg5 = None
-        for i, elem in enumerate(times_lst):
-            elem = elem.split(' ')
-            times_lst[i] = elem
-        return_lst = []
-        for lst in times_lst:
-            for t in lst:
-                return_lst.append(t)
+        times_lst = [elem.split(' ') for elem in times_lst]
+        # for i, elem in enumerate(times_lst):
+        #     elem = elem.split(' ')
+        #     times_lst[i] = elem
+        return_lst = [t for lst in times_lst for t in lst]
+        # for lst in times_lst:
+        #     for t in lst:
+        #         return_lst.append(t)
         self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = \
         return_lst, name, PB_single, PB_avg5, PB_scramble
         file.close()
@@ -54,13 +55,13 @@ class Computer:
             else:
                 return 'Square-1 is not supported.'
         layer_modifiers[0] = ''
-        layer_modifiers[len(layer_modifiers) - 1] = ''
+        layer_modifiers[-1] = ''
         return_value = ''
         prev_moves = []
         while(len(scramble) < length):
-            new_move = (moves[random.randint(0, len(moves) - 1)], 
-                        rotation_modifiers[random.randint(0, len(rotation_modifiers) - 1)],
-                        layer_modifiers[random.randint(0, len(layer_modifiers) - 1)])
+            new_move = (random.choice(moves), 
+                        random.choice(rotation_modifiers),
+                        random.choice(layer_modifiers))
             try:
                 prev_moves.index(new_move[0][0])
                 continue
@@ -92,20 +93,20 @@ class Computer:
     def do_mean(self, length):
         lst_copy = self.prepare_times(length)
         if(len(lst_copy) < length):
-            return('NA')
+            return 'NA'
         mean_time = (sum(lst_copy))/(len(lst_copy))
         if(mean_time == float('inf')):
-            return('DNF')
+            return 'DNF'
         return(round(mean_time, 2))
     
     def do_avg(self, length):
         lst_copy = self.prepare_times(length)
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
-            return('NA')
+            return 'NA'
         avg_time = (sum(updated_times_lst))/(len(updated_times_lst))
         if(avg_time == float('inf')):
-            return('DNF')
+            return'DNF'
         return(round(avg_time, 2))
     
     def convert_time(self, time):
@@ -127,8 +128,8 @@ class Computer:
             return str(self.convert_time(time))
         else:
             indicies = [i for i in range(len(time)) if i % 2 == len(time) % 2]
-            if len(time) % 2 != 0:indicies.insert(0, 0)
-            splits = [time[i:j] for i,j in zip(indicies, indicies[1:]+[None])] 
+            if len(time) % 2 == 1:indicies.insert(0, 0)
+            splits = [time[i:j] for i,j in zip(indicies, indicies[1:] + [None])] 
             final_time = ''
             for i, elem in enumerate(splits):
                 final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
