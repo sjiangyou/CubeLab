@@ -19,13 +19,7 @@ class Computer:
         if(PB_single == None):
             PB_avg5 = None
         times_lst = [elem.split(' ') for elem in times_lst]
-        # for i, elem in enumerate(times_lst):
-        #     elem = elem.split(' ')
-        #     times_lst[i] = elem
         return_lst = [t for lst in times_lst for t in lst]
-        # for lst in times_lst:
-        #     for t in lst:
-        #         return_lst.append(t)
         self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = \
         return_lst, name, PB_single, PB_avg5, PB_scramble
         file.close()
