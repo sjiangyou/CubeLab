@@ -63,7 +63,7 @@ class App:
                             try:newfile = open(str(App.computer.file), 'x')
                             except FileExistsError:new_scramble = 'Invalid Puzzle. '
                             else:
-                                newfile.write('(Name Here)\nS:\nA:\nPB Scramble:')
+                                newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
                                 newfile.close()
                                 new_scramble = 'Created new file. '
                         if(self.active_text == App.timein):

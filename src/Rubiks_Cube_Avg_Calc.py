@@ -13,7 +13,7 @@ class Computer:
         text = file.read()
         text = text.split('\n')
         name = text[0]
-        PB_avg5, PB_single = text[2][3:], text[1][3:]
+        PB_avg5, PB_single = text[2][5:], text[1][3:]
         PB_scramble = text[3][13:]
         times_lst = text[4:]
         if(PB_single == None):
@@ -22,6 +22,7 @@ class Computer:
         return_lst = [t for lst in times_lst for t in lst]
         self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = \
         return_lst, name, PB_single, PB_avg5, PB_scramble
+        print(PB_avg5)
         file.close()
     
     def generate_scramble(self):
@@ -145,7 +146,7 @@ class Computer:
     
     def write_file(self):
         file = open(self.file, 'w')
-        return_str = f'{self.name}\nS: {str(self.PB_single)}\nA: {str(self.PB_avg5)}\nPB Scramble: {self.PB_scramble}'
+        return_str = f'{self.name}\nS: {str(self.PB_single)}\nAO5: {str(self.PB_avg5)}\nPB Scramble: {self.PB_scramble}'
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):
