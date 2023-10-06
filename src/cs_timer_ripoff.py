@@ -72,9 +72,9 @@ class App:
                             if(App.computer.single):
                                 self.alerts.text += 'New PB Single! '
                                 App.computer.single = False
-                            if(App.computer.ao5):
+                            if(App.computer.average):
                                 self.alerts.text += 'New PB AO5!'
-                                App.computer.ao5 = False
+                                App.computer.average = False
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble

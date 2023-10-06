@@ -6,22 +6,24 @@ class Computer:
         self.puzzle = puzzle
         self.times = []
         self.single = False
-        self.ao5 = False
+        self.average = False
+        self.average_type = 'AO5'
     
     def read_file(self):
         file = open(self.file, 'r')
         text = file.read()
         text = text.split('\n')
         name = text[0]
-        PB_avg5, PB_single = text[2][3:], text[1][3:]
+        average_type = text[2][0:2]
+        PB_avg, PB_single = text[2][5:], text[1][3:]
         PB_scramble = text[3][13:]
         times_lst = text[4:]
         if(PB_single == None):
-            PB_avg5 = None
+            PB_avg = None
         times_lst = [elem.split(' ') for elem in times_lst]
         return_lst = [t for lst in times_lst for t in lst]
-        self.times, self.name, self.PB_single, self.PB_avg5, self.PB_scramble = \
-        return_lst, name, PB_single, PB_avg5, PB_scramble
+        self.times, self.name, self.PB_single, self.PB_avg, self.PB_scramble, self.average_type \
+        = return_lst, name, PB_single, PB_avg, PB_scramble, average_type
         file.close()
     
     def generate_scramble(self):
@@ -103,6 +105,15 @@ class Computer:
             return'DNF'
         return(round(avg_time, 2))
     
+    def calculate_average(self, average):
+        length = int(average[2:])
+        if(str(average[0]).upper() == 'A'):
+            return self.do_avg(length)
+        elif(str(average[0]).upper() == 'M'):
+            return self.do_mean(length)
+        else:
+            return 'Not an average'
+        
     def convert_time(self, time):
         if(time == 'DNF'):
             return float('inf')
@@ -133,19 +144,19 @@ class Computer:
         if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
-            current_ao5 = self.convert_time(self.do_avg(5))
+            current_average = self.convert_time(self.do_avg(5))
             if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
                 self.PB_scramble = self.scramble
                 self.PB_single = new_time
-            if((current_ao5 != 'NA' and not self.PB_avg5) or (len(self.times) >= 5 and current_ao5 < float(self.PB_avg5))):
-                self.ao5 = True
-                self.PB_avg5 = current_ao5
+            if((current_average != 'NA' and not self.PB_avg) or (len(self.times) >= 5 and current_average < float(self.PB_avg))):
+                self.average = True
+                self.PB_avg = current_average
             self.write_file()
     
     def write_file(self):
         file = open(self.file, 'w')
-        return_str = f'{self.name}\nS: {str(self.PB_single)}\nA: {str(self.PB_avg5)}\nPB Scramble: {self.PB_scramble}'
+        return_str = f'{self.name}\nS: {str(self.PB_single)}\nAO5: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):

@@ -5,6 +5,7 @@ Download the zip file under the Code menu.
 Create text files for each session you want to save times for.
 It is recommended that the file names be short. 
 Files should be formatted similar to the example file (example.txt) and use the .txt extension.
+Any average type can be recorded for PB purposes, on line 3 of the .txt file.
 Place these files in the same folder as the download.
 Change the configuration settings to your liking.
 Run the executable file corresponding to your operating system.
