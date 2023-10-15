@@ -14,7 +14,7 @@ class Computer:
         text = file.read()
         text = text.split('\n')
         name = text[0]
-        average_type = text[2][0:2]
+        average_type = text[2][0:3]
         PB_avg, PB_single = text[2][5:], text[1][3:]
         PB_scramble = text[3][13:]
         times_lst = text[4:]
@@ -112,7 +112,7 @@ class Computer:
         elif(str(average[0]).upper() == 'M'):
             return self.do_mean(length)
         else:
-            return 'Not an average'
+            return 'NA'
         
     def convert_time(self, time):
         if(time == 'DNF'):
@@ -144,19 +144,19 @@ class Computer:
         if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
-            current_average = self.convert_time(self.do_avg(5))
+            current_average = self.convert_time(self.calculate_average(self.average_type))
             if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
                 self.single = True
                 self.PB_scramble = self.scramble
                 self.PB_single = new_time
-            if((current_average != 'NA' and not self.PB_avg) or (len(self.times) >= 5 and current_average < float(self.PB_avg))):
+            if((current_average != 'NA' and not self.PB_avg) or (len(self.times) >= int(self.average_type[2:]) and current_average < float(self.PB_avg))):
                 self.average = True
                 self.PB_avg = current_average
             self.write_file()
     
     def write_file(self):
         file = open(self.file, 'w')
-        return_str = f'{self.name}\nS: {str(self.PB_single)}\nAO5: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
+        return_str = f'{self.name}\nS: {str(self.PB_single)}\n{self.average_type}: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
         if(len(self.times) != 0):
             return_str += '\n'
         for i, time in enumerate(self.times):
