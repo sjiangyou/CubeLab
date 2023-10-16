@@ -1,2 +1,2 @@
 pyinstaller
-pygame
+pygame==2.5.1

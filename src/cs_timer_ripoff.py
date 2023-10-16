@@ -13,7 +13,7 @@ class App:
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.apply_user_settings()
         App.screen.fill(App.backgroundcolor)
-        self.running = True
+        App.running = True
         App.filein = Textbox(pos = (0, 0), text = 'Session: ', edit = True, fontsize = App.main_fontsize)
         App.eventin = Textbox(pos = (0, App.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = App.main_fontsize)
         App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
@@ -46,9 +46,9 @@ class App:
                 break
     
     def run(self):
-        while self.running:
+        while App.running:
             for event in pygame.event.get():
-                if(event.type == pygame.QUIT or self.active_text == App.exitbutton): self.running = False
+                if(event.type == pygame.QUIT or self.active_text == App.exitbutton): App.running = False
                 if(event.type == KEYDOWN):
                     if(event.key == K_BACKSPACE):
                         if(len(self.active_text.text) > self.active_text.init_len): self.active_text.text = self.active_text.text[:-1]
@@ -72,9 +72,9 @@ class App:
                             if(App.computer.single):
                                 self.alerts.text += 'New PB Single! '
                                 App.computer.single = False
-                            if(App.computer.ao5):
-                                self.alerts.text += 'New PB AO5!'
-                                App.computer.ao5 = False
+                            if(App.computer.average):
+                                self.alerts.text += (f'New PB {App.computer.average_type}!')
+                                App.computer.average = False
                             new_scramble = App.computer.generate_scramble()
                             App.timein.text = App.timein.text[:6]
                         App.scdisplay[0].text = 'Scramble: ' + new_scramble
