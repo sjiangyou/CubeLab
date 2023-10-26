@@ -149,7 +149,7 @@ class Computer:
                 self.single = True
                 self.PB_scramble = self.scramble
                 self.PB_single = new_time
-            if((current_average != 'NA' and not self.PB_avg) or (len(self.times) >= int(self.average_type[2:]) and current_average < float(self.PB_avg))):
+            if((current_average != 'NA' and not (self.PB_avg or self.PB_avg == ' ')) or (len(self.times) >= int(self.average_type[2:]) and current_average < float(self.PB_avg))):
                 self.average = True
                 self.PB_avg = current_average
             self.write_file()
