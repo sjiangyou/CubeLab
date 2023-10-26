@@ -85,7 +85,7 @@ class App:
                                 text.text = text.text[:text.text.find(' ') + 1] + str(App.computer.do_mean(int(text.text[text.text.find('O') + 1:text.text.find(':')])))
                         for idx, text in enumerate(App.previous_solves):
                             try:text.text = str(App.computer.times[idx])
-                            except IndexError: continue
+                            except IndexError: text.text = ''
                         indicies = App.scdisplay[0].rollover()
                         count = 0
                         for num, loc in enumerate(indicies[:-1]):
