@@ -148,8 +148,9 @@ class Textbox:
     def rollover(self):
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
+        max_move_length = max([len(move) for move in App.computer.scramble.split(' ')])
         high = (pygame.display.get_surface().get_width() // (App.fonts[self.fontsize][0])) - 1
-        low = high - 3
+        low = high - max_move_length
         while possible_splits:
             try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
             except ValueError: return_indicies.append(possible_splits[-1])
