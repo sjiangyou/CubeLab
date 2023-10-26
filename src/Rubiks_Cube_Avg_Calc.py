@@ -32,7 +32,7 @@ class Computer:
         layer_modifiers = ['', '']
         scramble = []
         if(self.puzzle.isnumeric()):
-            layer_modifiers = list(range(1, int(self.puzzle)))
+            layer_modifiers = list(range(1, (round(int(self.puzzle) / 2) + 1)))
             length = 30 * (int(self.puzzle) - 2)
             if(self.puzzle == '2'):
                 moves = ['F', 'U', 'R']
@@ -51,7 +51,6 @@ class Computer:
             else:
                 return 'Square-1 is not supported.'
         layer_modifiers[0] = ''
-        layer_modifiers[-1] = ''
         return_value = ''
         prev_moves = []
         while(len(scramble) < length):
