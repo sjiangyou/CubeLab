@@ -62,7 +62,7 @@ class Computer:
                 continue
             except (ValueError, IndexError):pass
             if type(new_move[2]) == int:
-                new_move = (new_move[0] + 'w', new_move[1], new_move[2])
+                new_move = (new_move[0] + 'w', new_move[1], new_move[2]) if self.puzzle != '3' else (new_move[0], new_move[1], new_move[2])
                 if new_move[2] == 2:
                     new_move = (new_move[0], new_move[1], '')
             scramble.append(new_move)
