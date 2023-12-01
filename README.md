@@ -1,4 +1,4 @@
-This program has only been compiled on MacOS X for both Intel and M1/M2.
+This program has only been compiled and tested on MacOS X for both Intel and M1/M2.
 This program uses Python 3.11 and PyGame 2.5.1 (https://www.pygame.org/contribute.html)
 
 **Before using the program:**
