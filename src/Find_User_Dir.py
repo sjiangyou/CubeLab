@@ -1,11 +1,14 @@
 import os
-import platform
 
 def find(folder):
-    for root, dirs, files in os.walk(get_user_dir()):
-        if root.endswith(folder):
-            return os.path.join(root, '')
+    try:
+        os.chdir(os.path.expanduser(folder))
+        return os.path.join(os.getcwd(), '')
+    except(FileNotFoundError):
+        for root, dirs, files in os.walk(os.path.expanduser('~')):
+            if(root.endswith('Timer_Project_Files')):
+                return os.path.join(root, '')
         
-def get_user_dir():
-    bases = {'Linux': '/home/', 'Windows': 'C:\\Users\\', 'Darwin': '/Users/'}
-    return bases[platform.system()]
+if(__name__ == '__main__'):
+    import sys
+    print(find(sys.argv[1]))

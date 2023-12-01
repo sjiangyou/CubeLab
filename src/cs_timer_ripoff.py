@@ -10,8 +10,8 @@ class App:
     active_text = None
     def __init__(self):
         pygame.init()
-        App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.apply_user_settings()
+        App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         App.screen.fill(App.backgroundcolor)
         App.running = True
         App.filein = Textbox(pos = (0, 0), text = 'Session: ', edit = True, fontsize = App.main_fontsize)
@@ -33,6 +33,8 @@ class App:
         fonts = fonts.read().split('\n')
         App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(user_settings[3]), self.extract_color(user_settings[4])
+        os.chdir(find(user_settings[5]))
+        print(os.getcwd())
     
     def extract_color(self, rgb):
         rgb = rgb.split(',')
@@ -111,8 +113,7 @@ class App:
                 pygame.draw.rect(self.screen, App.textcolor, App.active_text.cursor)
             pygame.display.update()
             pygame.display.flip()
-
-             
+ 
 class Textbox:
     def __init__(self, pos, text, edit, fontsize):
         self.pos = pos
@@ -127,7 +128,7 @@ class Textbox:
         App.all_text.append(self)
     
     def set_font(self):
-        self.font = pygame.font.Font('Courier_New.ttf', self.fontsize)
+        self.font = pygame.font.Font(os.path.join(program_dir, 'Courier_New.ttf'), self.fontsize)
    
     def render_conv(self):
         try:
@@ -176,6 +177,7 @@ def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
 if(__name__ == '__main__'):
-    os.chdir(find('Timer_Project_Files'))
-    user_settings = (open('config.txt', 'r').read().split('\n'))[1:10:2]
+    program_dir = find('Timer_Project_Files')
+    os.chdir(program_dir)
+    user_settings = (open('config.txt', 'r').read().split('\n'))[1::2]
     App().run()
