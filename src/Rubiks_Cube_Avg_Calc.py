@@ -145,11 +145,11 @@ class Computer:
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
             current_average = self.convert_time(self.calculate_average(self.average_type))
-            if((new_time and not self.PB_single) or float(new_time) < float(self.PB_single)):
+            if((new_time and not self.PB_single) or float(new_time) <= float(self.PB_single)):
                 self.single = True
                 self.PB_scramble = self.scramble
                 self.PB_single = new_time
-            if((current_average != 'NA' and not (self.PB_avg or self.PB_avg == ' ')) or (len(self.times) >= int(self.average_type[2:]) and current_average < float(self.PB_avg))):
+            if((current_average != 'NA' and not (self.PB_avg or self.PB_avg == ' ')) or (len(self.times) >= int(self.average_type[2:]) and current_average <= float(self.PB_avg))):
                 self.average = True
                 self.PB_avg = current_average
             self.write_file()

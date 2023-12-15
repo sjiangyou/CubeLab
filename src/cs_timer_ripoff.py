@@ -34,7 +34,6 @@ class App:
         App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(user_settings[3]), self.extract_color(user_settings[4])
         os.chdir(find(user_settings[5]))
-        print(os.getcwd())
     
     def extract_color(self, rgb):
         rgb = rgb.split(',')
