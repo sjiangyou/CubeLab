@@ -62,7 +62,7 @@ class App:
                             new_scramble = App.computer.generate_scramble()
                         except(FileNotFoundError, IndexError):
                             try:newfile = open(str(App.computer.file), 'x')
-                            except FileExistsError:new_scramble = 'Invalid Puzzle. '
+                            except FileExistsError:new_scramble = App.computer.scramble = 'Invalid Puzzle. '
                             else:
                                 newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
                                 newfile.close()
