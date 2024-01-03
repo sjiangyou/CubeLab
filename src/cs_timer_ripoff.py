@@ -1,5 +1,5 @@
-from Rubiks_Cube_Avg_Calc import *
-from Find_User_Dir import *
+from Rubiks_Cube_Avg_Calc import Computer
+from Find_User_Dir import find
 import pygame
 from pygame.locals import *
 import time
@@ -9,6 +9,9 @@ class App:
     all_text = []
     active_text = None
     def __init__(self):
+        App.program_dir = find('Timer_Project_Files')
+        os.chdir(App.program_dir)
+        self.user_settings = (open('config.txt', 'r').read().split('\n'))[1::2]
         pygame.init()
         self.apply_user_settings()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -26,14 +29,14 @@ class App:
         App.active_text = App.all_text[0]
     
     def apply_user_settings(self):
-        self.averages = user_settings[0].split(', ')
-        App.main_fontsize = int(user_settings[1])
-        App.other_fontsize = int(user_settings[2])
+        self.averages = self.user_settings[0].split(', ')
+        App.main_fontsize = int(self.user_settings[1])
+        App.other_fontsize = int(self.user_settings[2])
         fonts = open('fontsizes.txt', 'r')
         fonts = fonts.read().split('\n')
         App.fonts = [eval(size) for size in fonts]
-        App.textcolor, App.backgroundcolor = self.extract_color(user_settings[3]), self.extract_color(user_settings[4])
-        os.chdir(find(user_settings[5]))
+        App.textcolor, App.backgroundcolor = self.extract_color(self.user_settings[3]), self.extract_color(self.user_settings[4])
+        os.chdir(find(self.user_settings[5]))
     
     def extract_color(self, rgb):
         rgb = rgb.split(',')
@@ -66,7 +69,7 @@ class App:
                             else:
                                 newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
                                 newfile.close()
-                                new_scramble = 'Created new file. '
+                                new_scramble = App.computer.scramble = 'Created new file. '
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[6:])
                             self.alerts.text = ''
@@ -127,7 +130,7 @@ class Textbox:
         App.all_text.append(self)
     
     def set_font(self):
-        self.font = pygame.font.Font(os.path.join(program_dir, 'Courier_New.ttf'), self.fontsize)
+        self.font = pygame.font.Font(os.path.join(App.program_dir, 'Courier_New.ttf'), self.fontsize)
    
     def render_conv(self):
         try:
@@ -175,8 +178,8 @@ class Button(Textbox):
 def search_num_list(lst, lower_bound, upper_bound):
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
-if(__name__ == '__main__'):
-    program_dir = find('Timer_Project_Files')
-    os.chdir(program_dir)
-    user_settings = (open('config.txt', 'r').read().split('\n'))[1::2]
+def main():
     App().run()
+
+if(__name__ == '__main__'):
+    main()

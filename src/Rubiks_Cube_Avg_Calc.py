@@ -46,10 +46,14 @@ class Computer:
             del rotation_modifiers[1]
             if(self.puzzle[0] == 'P'):
                 moves = ['U', 'L', 'R', 'B', 'u', 'l', 'r', 'b']
+            elif(self.puzzle[0] == 'C'):
+                self.scramble = 'Clock is not supported. '
+                return 'Clock is not supported. '
             elif(self.puzzle.find('1') == -1):
                 moves = ['U', 'L', 'R', 'B']
             else:
-                return 'Square-1 is not supported.'
+                self.scramble = 'Square-1 is not supported. '
+                return 'Square-1 is not supported. '
         layer_modifiers[0] = ''
         return_value = ''
         prev_moves = []
