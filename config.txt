@@ -1,12 +1,12 @@
 Averages displayed: 
-AO5, AO12, AO20
+AO5, MO3, AO12, AO20, AO50, AO100, AO1000
 Main Fontsize: 
-50
+75
 Scramble and Average Fontsize:
-35
+50
 Text color: 
-255,255,255
+0,255,0
 Background color: 
 0,0,0
 Directory to write times to (Optional, leave blank to write inside the program folder):
-~/Documents/Timer_Project_Files
+~/Documents/CubeLab

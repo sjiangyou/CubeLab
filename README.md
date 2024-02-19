@@ -31,4 +31,4 @@ Click on the exit button.
 __For contributors:__
 Bash scripts are provided to compile the program for MacOS only.
 Please use PyInstaller >= 6.0.0 when compiling the program and name the resulting executable file appropriately.
-If you are compiling for a new platform, please also add a new compiliation shell script to expedite future contibutions.
+If you are compiling for a new OS, please also add a new compiliation shell script to expedite future contibutions.

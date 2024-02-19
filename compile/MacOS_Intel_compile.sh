@@ -7,9 +7,9 @@ python3.11 -m venv .
 source bin/activate
 pip3.11 install -r requirements.txt
 cd src
-python3.11 -m PyInstaller --onefile --noconfirm --name=cs_timer_ripoff_MacOS_Intel --clean --distpath=../ cs_timer_ripoff.py
+python3.11 -m PyInstaller --onefile --noconfirm --name=CubeLab_MacOS_Intel --clean --distpath=../ CubeLab.py
 if [ $? -ne 0 ]; then
-    python3.11 -m pyinstaller --onefile --noconfirm --name=cs_timer_ripoff_MacOS_Intel --clean --distpath=../ cs_timer_ripoff.py
+    python3.11 -m pyinstaller --onefile --noconfirm --name=CubeLab_MacOS_Intel --clean --distpath=../ CubeLab.py
 fi
 for f in *.spec; do
     rm $f
