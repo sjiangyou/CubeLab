@@ -47,8 +47,8 @@ class Computer:
             if(self.puzzle[0] == 'P'):
                 moves = ['U', 'L', 'R', 'B', 'u', 'l', 'r', 'b']
             elif(self.puzzle[0] == 'C'):
-                self.scramble = 'Clock is not supported. '
-                return 'Clock is not supported. '
+                length = 15
+                moves = [str(i) for i in range(-5, 7)]
             elif(self.puzzle.find('1') == -1):
                 moves = ['U', 'L', 'R', 'B']
             else:
@@ -61,7 +61,7 @@ class Computer:
             new_move = (random.choice(moves), 
                         random.choice(rotation_modifiers),
                         random.choice(layer_modifiers))
-            if(self.puzzle[0] != 'M'):
+            if(self.puzzle[0] != 'M' or self.puzzle[0] != 'C'):
                 try:
                     prev_moves.index(new_move[0][0])
                     continue
@@ -77,6 +77,16 @@ class Computer:
             for (i, move) in enumerate(scramble):
                 if(i % 6 == 5):
                     scramble[i] = ('U', random.choice(('', '\'')), '')
+        if(self.puzzle[0] == 'C'):
+            move_order = ['UR', 'DR', 'DL', 'UL', 'U', 'R', 'D', 'L', 'ALL', 'y2', 'U', 'R', 'D', 'L', 'ALL']
+            for (i, move) in enumerate(scramble):
+                if i == 9:
+                    scramble[i] = ('y2', '', '')
+                else:
+                    if int(move[0]) >= 0:
+                        scramble[i] = (move_order[i], f'{move[0]}+', '')
+                    else:
+                        scramble[i] = (move_order[i], f'{move[0][1]}-', '')
         for move in scramble:
             return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]} '
         self.scramble = return_value
