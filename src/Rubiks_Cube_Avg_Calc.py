@@ -32,7 +32,7 @@ class Computer:
         layer_modifiers = ['', '']
         scramble = []
         if(self.puzzle.isnumeric()):
-            layer_modifiers = list(range(1, (round((int(self.puzzle) / 2) + 0.1) + 1)))
+            layer_modifiers = list(range(1, ((int(self.puzzle) // 2) + 1)))
             length = 30 * (int(self.puzzle) - 2)
             if(self.puzzle == '2'):
                 moves = ['F', 'U', 'R']
