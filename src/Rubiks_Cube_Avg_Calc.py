@@ -57,8 +57,11 @@ class Computer:
             elif(self.puzzle.find('1') == -1):
                 moves = ['U', 'L', 'R', 'B']
             elif(self.puzzle[0] == 'S'):
+                length = 15
                 del rotation_modifiers[1]
-                moves = []
+                top_moves = [0, 1, 3, 4, 6, 7, 10]
+                bottom_moves = [0, 2, 3, 5, 6, 8, 9, 11]
+                moves = [[top, bottom] for bottom in bottom_moves for top in top_moves]
                 length += random.randint(-5, 5)
             else:
                 self.scramble = 'Invalid Puzzle. '
