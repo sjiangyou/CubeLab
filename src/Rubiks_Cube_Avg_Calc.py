@@ -26,12 +26,14 @@ class Computer:
         = return_lst, name, PB_single, PB_avg, PB_scramble, average_type
         file.close()
     
-    def generate_scramble(self):
+    def set_possible_moves(self):
         moves = ['F', 'U', 'R', 'L', 'D', 'B']
         rotation_modifiers = ['', '2', '\'']
         layer_modifiers = ['', '']
-        scramble = []
         if(self.puzzle.isnumeric()):
+            if(int(self.puzzle) > 7):
+                self.scramble = 'Too big of a puzzle. '
+                return 'Too big of a puzzle. '
             layer_modifiers = list(range(1, ((int(self.puzzle) // 2) + 1)))
             length = 30 * (int(self.puzzle) - 2)
             if(self.puzzle == '2'):
@@ -39,40 +41,95 @@ class Computer:
                 length = 20
         elif(self.puzzle[0] == 'M'):
             moves = ['--', '-+', '+-', '++']
-            rotation_modifiers = ['', '', '']
+            rotation_modifiers = ['']
+            del layer_modifiers[1]
             length = 42
         else:
             length = 30
             del rotation_modifiers[1]
+            del layer_modifiers[1]
             if(self.puzzle[0] == 'P'):
                 moves = ['U', 'L', 'R', 'B', 'u', 'l', 'r', 'b']
             elif(self.puzzle[0] == 'C'):
                 length = 15
                 moves = [str(i) for i in range(-5, 7)]
+                del rotation_modifiers[1]
             elif(self.puzzle.find('1') == -1):
                 moves = ['U', 'L', 'R', 'B']
+            elif(self.puzzle[0] == 'S'):
+                length = 15
+                del rotation_modifiers[1]
+                top_moves = [0, 1, 3, 4, 6, 7, 10]
+                bottom_moves = [0, 2, 3, 5, 6, 8, 9, 11]
+                moves = [[top, bottom] for bottom in bottom_moves for top in top_moves]
+                length += random.randint(-5, 5)
             else:
-                self.scramble = 'Square-1 is not supported. '
-                return 'Square-1 is not supported. '
+                self.scramble = 'Invalid Puzzle. '
+                return 'Invalid Puzzle. ', None, None, None
         layer_modifiers[0] = ''
+        return moves, rotation_modifiers, layer_modifiers, length
+    
+    def generate_scramble(self):
+        moves, rotation_modifiers, layer_modifiers, length = self.set_possible_moves()
+        if(type(moves) == str):
+            return moves
+        scramble = []
         return_value = ''
         prev_moves = []
         while(len(scramble) < length):
-            new_move = (random.choice(moves), 
-                        random.choice(rotation_modifiers),
-                        random.choice(layer_modifiers))
+            new_move = (random.choice(moves), random.choice(rotation_modifiers), random.choice(layer_modifiers))
             if(self.puzzle[0] != 'M' and self.puzzle[0] != 'C'):
                 try:
                     prev_moves.index(new_move[0][0])
                     continue
-                except (ValueError, IndexError):pass
+                except(ValueError, IndexError): pass
             if type(new_move[2]) == int:
-                new_move = (new_move[0] + 'w', new_move[1], new_move[2]) if self.puzzle != '3' else (new_move[0], new_move[1], new_move[2])
+                new_move = (new_move[0] + 'w', new_move[1], new_move[2])
                 if new_move[2] == 2:
                     new_move = (new_move[0], new_move[1], '')
             scramble.append(new_move)
             prev_moves.append(new_move[0][0])
             prev_moves = prev_moves[-2:]
+            if(self.puzzle[0] == 'S' and self.puzzle.find('1') != -1):
+                top_layer = [1, 2] * 4
+                bottom_layer = [2, 1] * 4
+                top_moves = [sum(top_layer[:i]) for i in range(len(top_layer))]
+                bottom_moves = [sum(bottom_layer[:i]) for i in range(len(bottom_layer))]
+                for i, move in enumerate(scramble):
+                    top_moves = [sum(top_layer[:i]) for i in range(len(top_layer))]
+                    bottom_moves = [sum(bottom_layer[:i]) for i in range(len(bottom_layer))]
+                    top_index = top_moves.index(move[0][0])
+                    bottom_index = bottom_moves.index(move[0][1])
+                    U_top_layer = top_layer[top_index:] + top_layer[:top_index]
+                    D_bottom_layer = bottom_layer[bottom_index:] + bottom_layer[:bottom_index]
+                    slice_top_index = top_moves.index(move[0][0] - 6) if move[0][0] >= 6 else top_moves.index(move[0][0] + 6)
+                    slice_top_index -= top_index
+                    slice_bottom_index = bottom_moves.index(move[0][1] - 6) if move[0][1] >= 6 else bottom_moves.index(move[0][1] + 6)
+                    slice_bottom_index -= bottom_index
+                    top_layer = D_bottom_layer[slice_bottom_index:] + U_top_layer[slice_top_index:]
+                    bottom_layer = D_bottom_layer[:slice_bottom_index] + U_top_layer[:slice_top_index]
+                    top_moves = [sum(top_layer[:i]) for i in range(len(top_layer))]
+                    bottom_moves = [sum(bottom_layer[:i]) for i in range(len(bottom_layer))]
+                idx = 0
+                while idx < len(top_moves):
+                    try:
+                        if top_moves[idx] < 6: top_moves.index(top_moves[idx] + 6)
+                        else: top_moves.index(top_moves[idx] - 6)
+                    except ValueError:
+                        del top_moves[idx]
+                        continue
+                    idx += 1
+                idx = 0
+                while idx < len(bottom_moves):
+                    try:
+                        if bottom_moves[idx] < 6: bottom_moves.index(bottom_moves[idx] + 6)
+                        else: bottom_moves.index(bottom_moves[idx] - 6)
+                    except ValueError:
+                        del bottom_moves[idx]
+                        continue
+                    idx += 1
+                moves = [[top, bottom] for bottom in bottom_moves for top in top_moves]
+                del moves[0]
         if(self.puzzle[0] == 'M'):
             for (i, move) in enumerate(scramble):
                 if(i % 6 == 5):
@@ -87,8 +144,14 @@ class Computer:
                         scramble[i] = (move_order[i], f'{move[0]}+', '')
                     else:
                         scramble[i] = (move_order[i], f'{move[0][1]}-', '')
+        if(self.puzzle[0] == 'S' and self.puzzle.find('1') != -1):
+            for i, move in enumerate(scramble):
+                temp = move[0]
+                if int(move[0][0]) > 6: temp[0] -= 12
+                if int(move[0][1]) > 6: temp[1] -= 12
+                scramble[i] = (f'{temp[0]},{temp[1]}/', '', '') if i < length else (f'{temp[0]},{temp[1]}', '', '')
         for move in scramble:
-            return_value = f'{return_value}{str(move[2])}{move[0]}{move[1]} '
+            return_value = f'{return_value}{str(move[2])}{str(move[0])}{str(move[1])} '
         self.scramble = return_value
         return return_value
     
