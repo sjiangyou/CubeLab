@@ -33,7 +33,7 @@ class Computer:
         if(self.puzzle.isnumeric()):
             if(int(self.puzzle) > 7):
                 self.scramble = 'Too big of a puzzle. '
-                return 'Too big of a puzzle. '
+                return 'Too big of a puzzle. ', None, None, None
             layer_modifiers = list(range(1, ((int(self.puzzle) // 2) + 1)))
             length = 30 * (int(self.puzzle) - 2)
             if(self.puzzle == '2'):
