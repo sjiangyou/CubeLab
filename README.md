@@ -20,6 +20,7 @@ The color of the background and text can be changed by typing in RGB values, onl
 **While running:**
 To use the program, type in the session name to save the results to, then the puzzle type for the scramble.
 Press the Enter key on the keyboard to generate new scrambles.
+Scrambles are only generated for WCA puzzles!
 Type in a time and press Enter while the cursor is on the time input to save the time.
 Times should be formatted like HH:MM:SS.XX, XXXX.XX, or MMSSXX.
 Averages are automatically calculated at the bottom of the screen. 

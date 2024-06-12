@@ -32,13 +32,13 @@ class Computer:
         layer_modifiers = ['', '']
         if(self.puzzle.isnumeric()):
             if(int(self.puzzle) > 7):
-                self.scramble = 'Too big of a puzzle. '
-                return 'Too big of a puzzle. ', None, None, None
+                self.scramble = 'Non-WCA. '
+                return 'Non-WCA. ', None, None, None
             layer_modifiers = list(range(1, ((int(self.puzzle) // 2) + 1)))
-            length = 30 * (int(self.puzzle) - 2)
+            length = 20 * (int(self.puzzle) - 2)
             if(self.puzzle == '2'):
                 moves = ['F', 'U', 'R']
-                length = 20
+                length = 10
         elif(self.puzzle[0] == 'M'):
             moves = ['--', '-+', '+-', '++']
             rotation_modifiers = ['']

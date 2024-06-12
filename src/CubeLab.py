@@ -7,12 +7,16 @@ import os
 
 class App:
     all_text = []
+    all_scenes = []
     active_text = None
-    def __init__(self):
+    active_scene = None
+    def __init__(self) -> None:
         App.program_dir = find('CubeLab')
         os.chdir(App.program_dir)
         self.user_settings = (open('config.txt', 'r').read().split('\n'))[1::2]
         pygame.init()
+        pygame.display.set_caption('CubeLab')
+        App.computer = Computer('', '')
         self.apply_user_settings()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         App.screen.fill(App.backgroundcolor)
@@ -22,13 +26,14 @@ class App:
         App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
         App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
         App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - App.main_fontsize), text = '', edit = False, fontsize = App.main_fontsize)
-        App.computer = Computer('', '')
         App.avdisplay = [Textbox(pos = (round(13.5 * App.fonts[App.other_fontsize - 20][0] * i), pygame.display.get_surface().get_height() - App.other_fontsize + 20), text = (av + ': '), edit = False, fontsize = App.other_fontsize - 20) for (i, av) in enumerate(self.averages)]
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
         App.exitbutton = Button(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - 2 * App.main_fontsize), text = 'Exit ', fontsize = App.main_fontsize)
-        App.active_text = App.all_text[0]
+        App.stackmat_scene = Scene('Stackmat', App.all_text, App.backgroundcolor)
+        App.active_text = App.stackmat_scene.nodes[0]
+        App.active_scene = App.stackmat_scene
     
-    def apply_user_settings(self):
+    def apply_user_settings(self) -> None:
         self.averages = self.user_settings[0].split(', ')
         App.main_fontsize = int(self.user_settings[1])
         App.other_fontsize = int(self.user_settings[2])
@@ -38,18 +43,18 @@ class App:
         App.textcolor, App.backgroundcolor = self.extract_color(self.user_settings[3]), self.extract_color(self.user_settings[4])
         os.chdir(find(self.user_settings[5]))
     
-    def extract_color(self, rgb):
+    def extract_color(self, rgb) -> tuple:
         rgb = rgb.split(',')
         rgb = [int(value) for value in rgb]
         return tuple(rgb)
     
-    def change_active(self, mouse):
+    def change_active(self, mouse) -> None:
         for text in App.all_text:
             if(pygame.Rect.collidepoint(text.rect, mouse) and (text.edit or type(text) == Button)):
                 App.active_text = text
                 break
     
-    def run(self):
+    def run(self) -> None:
         while App.running:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT or self.active_text == App.exitbutton): App.running = False
@@ -109,15 +114,31 @@ class App:
                 if(event.type == MOUSEBUTTONDOWN):
                     self.change_active(event.pos)
             self.screen.fill(App.backgroundcolor)
-            for text in App.all_text:
+            for text in App.stackmat_scene.nodes:
                 text.draw()
             if(time.time() % 1 > 0.5 and type(App.active_text) != Button):
                 pygame.draw.rect(self.screen, App.textcolor, App.active_text.cursor)
             pygame.display.update()
             pygame.display.flip()
- 
+            
+class Scene:
+    def __init__(self, title, nodes, back_color) -> None:
+        self.title = title
+        self.nodes = nodes
+        self.back_color = back_color
+        App.all_scenes.append(self)
+        
+    def set_active(self) -> None:
+        App.active_scene = self
+        self.render_conv()
+    
+    def render_conv(self) -> None:
+        for node in self.nodes:
+            node.render_conv()
+            node.draw()
+
 class Textbox:
-    def __init__(self, pos, text, edit, fontsize):
+    def __init__(self, pos, text, edit, fontsize) -> None:
         self.pos = pos
         self.text = text
         self.edit = edit
@@ -129,10 +150,10 @@ class Textbox:
         self.draw()
         App.all_text.append(self)
     
-    def set_font(self):
+    def set_font(self) -> None:
         self.font = pygame.font.Font(os.path.join(App.program_dir, 'Courier_New.ttf'), self.fontsize)
    
-    def render_conv(self):
+    def render_conv(self) -> None:
         try:
             if(self.text[0] == ' '):self.text = self.text[1:]
         except:pass
@@ -142,13 +163,13 @@ class Textbox:
         self.cursor = Rect(self.rect.topright, (3, self.rect.height))
         self.rect = Rect(self.pos, (pygame.display.get_surface().get_width(), self.fontsize))
     
-    def draw(self):
+    def draw(self) -> None:
         App.screen.blit(self.img, self.rect)
     
-    def check_mouse(self, mouse):
+    def check_mouse(self, mouse) -> bool:
         return(self.rect.collidepoint(mouse))
     
-    def rollover(self):
+    def rollover(self) -> list:
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == ' ']
         max_move_length = max([len(move) for move in App.computer.scramble.split(' ')])
@@ -164,10 +185,10 @@ class Textbox:
         return return_indicies[1:]
 
 class Button(Textbox):
-    def __init__(self, pos, text, fontsize):
-        Textbox.__init__(self, pos, text, False, fontsize)
+    def __init__(self, pos, text, fontsize) -> None:
+        super().__init__(pos, text, False, fontsize)
         
-    def render_conv(self):
+    def render_conv(self) -> None:
         try:
             if(self.text[0] == ' '):self.text = self.text[1:]
         except:pass
@@ -175,10 +196,10 @@ class Button(Textbox):
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
 
-def search_num_list(lst, lower_bound, upper_bound):
+def search_num_list(lst, lower_bound, upper_bound) -> list:
     return([num for num in lst if lower_bound <= num <= upper_bound])
 
-def main():
+def main() -> None:
     App().run()
 
 if(__name__ == '__main__'):
