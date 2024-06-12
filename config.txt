@@ -9,4 +9,4 @@ Text color:
 Background color: 
 0,0,0
 Directory to write times to (Optional, leave blank to write inside the program folder):
-~/Documents/CubeLab
+~/Programs/CubeLab
