@@ -1,4 +1,4 @@
-from Rubiks_Cube_Avg_Calc import Computer
+from Computer import Computer
 from Find_User_Dir import find
 import pygame
 from pygame.locals import *
@@ -13,7 +13,9 @@ class App:
     def __init__(self) -> None:
         App.program_dir = find('CubeLab')
         os.chdir(App.program_dir)
-        self.user_settings = (open('config.txt', 'r').read().split('\n'))[1::2]
+        self.config_file = open('config.txt', 'r')
+        self.user_settings = (self.config_file.read().split('\n'))[1::2]
+        self.config_file.close()
         pygame.init()
         pygame.display.set_caption('CubeLab')
         App.computer = Computer('', '')
@@ -30,6 +32,7 @@ class App:
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
         App.exitbutton = Button(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - 2 * App.main_fontsize), text = 'Exit ', fontsize = App.main_fontsize)
         App.stackmat_scene = Scene('Stackmat', App.all_text, App.backgroundcolor)
+        App.timer_scene = Scene('Timer', App.all_text, App.backgroundcolor)
         App.active_text = App.stackmat_scene.nodes[0]
         App.active_scene = App.stackmat_scene
     
@@ -37,8 +40,9 @@ class App:
         self.averages = self.user_settings[0].split(', ')
         App.main_fontsize = int(self.user_settings[1])
         App.other_fontsize = int(self.user_settings[2])
-        fonts = open('fontsizes.txt', 'r')
-        fonts = fonts.read().split('\n')
+        fontsizes = open('fontsizes.txt', 'r')
+        fonts = fontsizes.read().split('\n')
+        fontsizes.close()
         App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(self.user_settings[3]), self.extract_color(self.user_settings[4])
         os.chdir(find(self.user_settings[5]))
