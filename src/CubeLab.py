@@ -75,6 +75,7 @@ class App:
                         except(FileNotFoundError, IndexError):
                             try:newfile = open(str(App.computer.file), 'x')
                             except FileExistsError:new_scramble = App.computer.scramble = 'Invalid Puzzle. '
+                            except FileNotFoundError:new_scramble = App.computer.scramble = 'Invalid Session. '
                             else:
                                 newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
                                 newfile.close()
@@ -180,7 +181,7 @@ class Textbox:
         high = (pygame.display.get_surface().get_width() // (App.fonts[self.fontsize][0])) - 1
         low = high - max_move_length
         while possible_splits:
-            try:return_indicies.append(max(search_num_list(possible_splits, low, high)))
+            try:return_indicies.append(max([num for num in possible_splits if low <= num <= high]))
             except ValueError: return_indicies.append(possible_splits[-1])
             possible_splits = [idx for idx in possible_splits if idx > return_indicies[-1]]
             delta_index = return_indicies[-1] - return_indicies[-2]
@@ -199,9 +200,6 @@ class Button(Textbox):
         self.img = self.font.render(self.text, True, self.fontcolor)
         self.rect = self.img.get_rect()
         self.rect.topleft = self.pos
-
-def search_num_list(lst, lower_bound, upper_bound) -> list:
-    return([num for num in lst if lower_bound <= num <= upper_bound])
 
 def main() -> None:
     App().run()
