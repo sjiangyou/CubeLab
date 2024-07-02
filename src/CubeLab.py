@@ -10,6 +10,8 @@ class App:
     all_scenes = []
     active_text = None
     active_scene = None
+    file = ''
+    puzzle = ''
     def __init__(self) -> None:
         App.program_dir = find('CubeLab')
         os.chdir(App.program_dir)
@@ -34,7 +36,7 @@ class App:
         App.stackmat_scene = Scene('Stackmat', App.all_text, App.backgroundcolor)
         App.timer_scene = Scene('Timer', App.all_text, App.backgroundcolor)
         App.active_text = App.stackmat_scene.nodes[0]
-        App.active_scene = App.stackmat_scene
+        App.active_scene = App.stackmat_scene if App.timing_method[0].upper() == 'S' else App.timer_scene
     
     def apply_user_settings(self) -> None:
         self.averages = self.user_settings[0].split(', ')
@@ -45,18 +47,23 @@ class App:
         fontsizes.close()
         App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(self.user_settings[3]), self.extract_color(self.user_settings[4])
-        os.chdir(find(self.user_settings[5]))
+        App.timing_method = self.user_settings[5]
+        os.chdir(find(self.user_settings[6]))
     
     def extract_color(self, rgb) -> tuple:
         rgb = rgb.split(',')
         rgb = [int(value) for value in rgb]
         return tuple(rgb)
     
-    def change_active(self, mouse) -> None:
-        for text in App.all_text:
+    def change_active_mouse(self, mouse) -> None:
+        for text in App.active_scene.nodes:
             if(pygame.Rect.collidepoint(text.rect, mouse) and (text.edit or type(text) == Button)):
                 App.active_text = text
                 break
+    
+    def change_active_keyboard(self) -> None:
+        possible_text = [text for text in App.active_scene.nodes if text.edit]
+        App.active_text = possible_text[(possible_text.index(App.active_text) + 1) % len(possible_text)]
     
     def run(self) -> None:
         while App.running:
@@ -66,9 +73,11 @@ class App:
                     if(event.key == K_BACKSPACE):
                         if(len(self.active_text.text) > self.active_text.init_len): self.active_text.text = self.active_text.text[:-1]
                     elif(event.key == K_TAB):
-                        App.active_text = App.all_text[(App.all_text.index(App.active_text) + 1) % 3]
+                        self.change_active_keyboard()
                     elif(event.key == K_RETURN):
-                        App.computer = Computer(App.filein.text[(App.filein.init_len):], App.eventin.text[(App.eventin.init_len):])
+                        App.file = App.filein.text[App.filein.init_len:]
+                        App.puzzle = App.eventin.text[App.eventin.init_len:]
+                        App.computer = Computer(App.file, App.puzzle)
                         try:
                             App.computer.read_file()
                             new_scramble = App.computer.generate_scramble()
@@ -81,7 +90,7 @@ class App:
                                 newfile.close()
                                 new_scramble = App.computer.scramble = 'Created new file. '
                         if(self.active_text == App.timein):
-                            App.computer.run(App.timein.text[6:])
+                            App.computer.run(App.timein.text[App.timein.init_len:])
                             self.alerts.text = ''
                             if(App.computer.single):
                                 self.alerts.text += 'New PB Single! '
@@ -117,7 +126,7 @@ class App:
                     for text in App.stackmat_scene.nodes:
                         text.render_conv()
                 if(event.type == MOUSEBUTTONDOWN):
-                    self.change_active(event.pos)
+                    self.change_active_mouse(event.pos)
             self.screen.fill(App.backgroundcolor)
             for text in App.stackmat_scene.nodes:
                 text.draw()
@@ -182,7 +191,7 @@ class Textbox:
         low = high - max_move_length
         while possible_splits:
             try:return_indicies.append(max([num for num in possible_splits if low <= num <= high]))
-            except ValueError: return_indicies.append(possible_splits[-1])
+            except ValueError:return_indicies.append(possible_splits[-1])
             possible_splits = [idx for idx in possible_splits if idx > return_indicies[-1]]
             delta_index = return_indicies[-1] - return_indicies[-2]
             low += delta_index

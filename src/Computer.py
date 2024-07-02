@@ -1,7 +1,7 @@
 import random
 
 class Computer:
-    def __init__(self, file, puzzle):
+    def __init__(self, file, puzzle) -> None:
         self.file = file
         self.puzzle = puzzle
         self.times = []
@@ -9,7 +9,7 @@ class Computer:
         self.average = False
         self.average_type = 'AO5'
     
-    def read_file(self):
+    def read_file(self) -> None:
         file = open(self.file, 'r')
         text = file.read()
         text = text.split('\n')
@@ -26,7 +26,7 @@ class Computer:
         = return_lst, name, PB_single, PB_avg, PB_scramble, average_type
         file.close()
     
-    def set_possible_moves(self):
+    def set_possible_moves(self) -> tuple:
         moves = ['F', 'U', 'R', 'L', 'D', 'B']
         rotation_modifiers = ['', '2', '\'']
         layer_modifiers = ['', '']
@@ -69,7 +69,7 @@ class Computer:
         layer_modifiers[0] = ''
         return moves, rotation_modifiers, layer_modifiers, length
     
-    def generate_scramble(self):
+    def generate_scramble(self) -> str:
         moves, rotation_modifiers, layer_modifiers, length = self.set_possible_moves()
         if(type(moves) == str):
             return moves
@@ -155,7 +155,7 @@ class Computer:
         self.scramble = return_value
         return return_value
     
-    def prepare_times(self, length):
+    def prepare_times(self, length) -> list:
         if(self.times == []):
             return('NA')
         self.times = [float(time) if time != 'DNF' else float('inf') for time in self.times]
@@ -163,7 +163,7 @@ class Computer:
         lst_copy.sort()
         return lst_copy
     
-    def do_mean(self, length):
+    def do_mean(self, length) -> float:
         lst_copy = self.prepare_times(length)
         if(len(lst_copy) < length):
             return 'NA'
@@ -172,7 +172,7 @@ class Computer:
             return 'DNF'
         return(round(mean_time, 2))
     
-    def do_avg(self, length):
+    def do_avg(self, length) -> float:
         lst_copy = self.prepare_times(length)
         updated_times_lst = lst_copy[1:len(lst_copy) - 1]
         if(len(updated_times_lst) < length - 2):
@@ -182,7 +182,7 @@ class Computer:
             return'DNF'
         return(round(avg_time, 2))
     
-    def calculate_average(self, average):
+    def calculate_average(self, average) -> float:
         length = int(average[2:])
         if(str(average[0]).upper() == 'A'):
             return self.do_avg(length)
@@ -191,7 +191,7 @@ class Computer:
         else:
             return 'NA'
         
-    def convert_time(self, time):
+    def convert_time(self, time) -> float:
         if(time == 'DNF'):
             return float('inf')
         if(time == 'NA'):
@@ -205,7 +205,7 @@ class Computer:
         time = sum(time)
         return time
 
-    def convert_fasttime(self, time):
+    def convert_fasttime(self, time) -> str:
         if not time.isdigit():
             return str(self.convert_time(time))
         else:
@@ -217,7 +217,7 @@ class Computer:
                 final_time += elem + ':' if i != len(splits) - 2 else elem + '.'
             return str(self.convert_time(final_time[:-1]))
 
-    def run(self, new_time):
+    def run(self, new_time) -> None:
         if(new_time.replace('.', '').replace(':','').isdigit() or new_time == 'DNF'):
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
@@ -231,7 +231,7 @@ class Computer:
                 self.PB_avg = current_average
             self.write_file()
     
-    def write_file(self):
+    def write_file(self) -> None:
         file = open(self.file, 'w')
         return_str = f'{self.name}\nS: {str(self.PB_single)}\n{self.average_type}: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
         if(len(self.times) != 0):
