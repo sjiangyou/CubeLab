@@ -15,12 +15,11 @@ class App:
     def __init__(self) -> None:
         App.program_dir = find('CubeLab')
         os.chdir(App.program_dir)
-        self.config_file = open('config.txt', 'r')
-        self.user_settings = (self.config_file.read().split('\n'))[1::2]
-        self.config_file.close()
         pygame.init()
         pygame.display.set_caption('CubeLab')
         App.computer = Computer('', '')
+        with open('config.txt', 'r') as file:
+            self.user_settings = (file.read().split('\n'))[1::2]
         self.apply_user_settings()
         App.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         App.screen.fill(App.backgroundcolor)
@@ -28,20 +27,21 @@ class App:
         App.filein = Textbox(pos = (0, 0), text = 'Session: ', edit = True, fontsize = App.main_fontsize)
         App.eventin = Textbox(pos = (0, App.main_fontsize), text = 'Puzzle: ', edit = True, fontsize = App.main_fontsize)
         App.timein = Textbox(pos = (0, 2 * App.main_fontsize), text = 'Time: ', edit = True, fontsize = App.main_fontsize)
-        App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.other_fontsize)]
-        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - App.main_fontsize), text = '', edit = False, fontsize = App.main_fontsize)
-        App.avdisplay = [Textbox(pos = (round(13.5 * App.fonts[App.other_fontsize - 20][0] * i), pygame.display.get_surface().get_height() - App.other_fontsize + 20), text = (av + ': '), edit = False, fontsize = App.other_fontsize - 20) for (i, av) in enumerate(self.averages)]
+        App.scdisplay = [Textbox(pos = (0, 3 * App.main_fontsize), text = 'Scramble: ', edit = False, fontsize = App.second_fontsize)]
+        App.alerts = Textbox(pos = (0, pygame.display.get_surface().get_height() - App.main_fontsize - App.third_fontsize), text = '', edit = False, fontsize = App.main_fontsize)
+        App.avdisplay = [Textbox(pos = (round(13.5 * App.fonts[App.third_fontsize][0] * i), pygame.display.get_surface().get_height() - App.third_fontsize), text = (av + ': '), edit = False, fontsize = App.third_fontsize) for (i, av) in enumerate(self.averages)]
         App.previous_solves = [Textbox(pos = (pygame.display.get_surface().get_width() - 200, int(round(0.6 * i * App.main_fontsize))), text = '', edit = False, fontsize = int(round(0.6 * App.main_fontsize))) for i in range(5)]
-        App.exitbutton = Button(pos = (0, pygame.display.get_surface().get_height() - App.other_fontsize + 20 - 2 * App.main_fontsize), text = 'Exit ', fontsize = App.main_fontsize)
+        App.exitbutton = Button(pos = (0, pygame.display.get_surface().get_height() - App.third_fontsize - 2 * App.main_fontsize), text = 'Exit ', fontsize = App.main_fontsize)
         App.stackmat_scene = Scene('Stackmat', App.all_text, App.backgroundcolor)
-        App.timer_scene = Scene('Timer', App.all_text, App.backgroundcolor)
-        App.active_text = App.stackmat_scene.nodes[0]
+        App.timer_scene = Scene('Timer', [], App.backgroundcolor)
         App.active_scene = App.stackmat_scene if App.timing_method[0].upper() == 'S' else App.timer_scene
+        App.active_text = App.active_scene.nodes[0]
     
     def apply_user_settings(self) -> None:
         self.averages = self.user_settings[0].split(', ')
         App.main_fontsize = int(self.user_settings[1])
-        App.other_fontsize = int(self.user_settings[2])
+        App.second_fontsize = int(self.user_settings[2])
+        App.third_fontsize = App.second_fontsize - 20
         fontsizes = open('fontsizes.txt', 'r')
         fonts = fontsizes.read().split('\n')
         fontsizes.close()
@@ -49,6 +49,10 @@ class App:
         App.textcolor, App.backgroundcolor = self.extract_color(self.user_settings[3]), self.extract_color(self.user_settings[4])
         App.timing_method = self.user_settings[5]
         os.chdir(find(self.user_settings[6]))
+    
+    def populate_scene(self, scene, file) -> None:
+        with open(file, 'r') as file:
+            pass
     
     def extract_color(self, rgb) -> tuple:
         rgb = rgb.split(',')
@@ -86,8 +90,8 @@ class App:
                             except FileExistsError:new_scramble = App.computer.scramble = 'Invalid Puzzle. '
                             except FileNotFoundError:new_scramble = App.computer.scramble = 'Invalid Session. '
                             else:
-                                newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
-                                newfile.close()
+                                with newfile:
+                                    newfile.write('(Name Here)\nS:\nAO5:\nPB Scramble:')
                                 new_scramble = App.computer.scramble = 'Created new file. '
                         if(self.active_text == App.timein):
                             App.computer.run(App.timein.text[App.timein.init_len:])
@@ -113,7 +117,7 @@ class App:
                         count = 0
                         for num, loc in enumerate(indicies[:-1]):
                             if(count + 2 > len(App.scdisplay)):
-                                App.scdisplay.append(Textbox(pos = (0, (self.main_fontsize * 3) + (self.other_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = App.other_fontsize))
+                                App.scdisplay.append(Textbox(pos = (0, (App.main_fontsize * 3) + (App.second_fontsize * (count + 1))), text = App.scdisplay[0].text[loc:indicies[num + 1]], edit = False, fontsize = App.second_fontsize))
                             else:
                                 App.scdisplay[count + 1].text = App.scdisplay[0].text[loc:indicies[num + 1]]
                             count += 1

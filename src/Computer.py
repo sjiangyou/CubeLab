@@ -10,8 +10,8 @@ class Computer:
         self.average_type = 'AO5'
     
     def read_file(self) -> None:
-        file = open(self.file, 'r')
-        text = file.read()
+        with open(self.file, 'r') as file:
+            text = file.read()
         text = text.split('\n')
         name = text[0]
         average_type = text[2][0:3]
@@ -24,7 +24,6 @@ class Computer:
         return_lst = [t for lst in times_lst for t in lst]
         self.times, self.name, self.PB_single, self.PB_avg, self.PB_scramble, self.average_type \
         = return_lst, name, PB_single, PB_avg, PB_scramble, average_type
-        file.close()
     
     def set_possible_moves(self) -> tuple:
         moves = ['F', 'U', 'R', 'L', 'D', 'B']
@@ -149,7 +148,7 @@ class Computer:
                 temp = move[0]
                 if int(move[0][0]) > 6: temp[0] -= 12
                 if int(move[0][1]) > 6: temp[1] -= 12
-                scramble[i] = (f'{temp[0]},{temp[1]}/', '', '') if i < length else (f'{temp[0]},{temp[1]}', '', '')
+                scramble[i] = (f'{temp[0]},{temp[1]} /', '', '') if i < length else (f'{temp[0]},{temp[1]}', '', '')
         for move in scramble:
             return_value = f'{return_value}{str(move[2])}{str(move[0])}{str(move[1])} '
         self.scramble = return_value
@@ -232,22 +231,21 @@ class Computer:
             self.write_file()
     
     def write_file(self) -> None:
-        file = open(self.file, 'w')
-        return_str = f'{self.name}\nS: {str(self.PB_single)}\n{self.average_type}: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
-        if(len(self.times) != 0):
-            return_str += '\n'
-        for i, time in enumerate(self.times):
-            time = str(round(self.convert_time(time), 2))
-            if(time == 'inf'):
-                time = 'DNF'
-            if(time.find('.') == len(time) - 2):
-                time += '0'
-            return_str += time
-            if(i == len(self.times) - 1):
-                break
-            elif(i % 10 == 9):
+        with open(self.file, 'w') as file:
+            return_str = f'{self.name}\nS: {str(self.PB_single)}\n{self.average_type}: {str(self.PB_avg)}\nPB Scramble: {self.PB_scramble}'
+            if(len(self.times) != 0):
                 return_str += '\n'
-            else:
-                return_str += ' '
-        file.write(str(return_str))
-        file.close()
+            for i, time in enumerate(self.times):
+                time = str(round(self.convert_time(time), 2))
+                if(time == 'inf'):
+                    time = 'DNF'
+                if(time.find('.') == len(time) - 2):
+                    time += '0'
+                return_str += time
+                if(i == len(self.times) - 1):
+                    break
+                elif(i % 10 == 9):
+                    return_str += '\n'
+                else:
+                    return_str += ' '
+            file.write(str(return_str))
