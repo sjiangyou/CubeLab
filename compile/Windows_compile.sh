@@ -7,9 +7,9 @@ python -m venv .
 source Scripts/activate
 pip install -r requirements.txt
 cd src
-python -m PyInstaller --onefile --noconfirm --name=CubeLab_Windows --clean --distpath=../ CubeLab.py
+python -m PyInstaller --onefile --noconfirm --name=CubeLab_Windows --clean --distpath=../ CubeLab.py --optimize=2
 if [ $? -ne 0 ]; then
-    python -m pyinstaller --onefile --noconfirm --name=CubeLab_Windows--clean --distpath=../ CubeLab.py
+    python -m pyinstaller --onefile --noconfirm --name=CubeLab_Windows--clean --distpath=../ CubeLab.py --optimize=2
 fi
 for f in *.spec; do
     rm $f
