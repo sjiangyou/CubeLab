@@ -1,7 +1,7 @@
 import os
 
 
-def find(folder):
+def find(folder) -> str:
     try:
         os.chdir(os.path.expanduser(folder))
         return os.path.join(os.getcwd(), "")
