@@ -59,8 +59,7 @@
 		</textbox>
 	</list>
 	<textbox name = 'alerts' index = '5'>
-		<!-- Position chosen to be just above the textboxes for averages. -->
-		<position>(0, App.height - App.main_fontsize - App.third_fontsize)</position>
+		<position>(0, App.height - App.third_fontsize - (2 * App.main_fontsize))</position>
 		<text>''</text>
 		<edit>False</edit>
 		<fontsize>App.main_fontsize</fontsize>
@@ -73,8 +72,9 @@
 			<fontsize>App.third_fontsize</fontsize>
 		</textbox>
 	</list>
-	<button name = 'exitbutton' index = '7'>
-		<position>(0, App.height - App.third_fontsize - (2 * App.main_fontsize))</position>
+    <button name = 'exitbutton' index = '7'>
+		<!-- Position chosen to be just above the textboxes for averages. -->
+		<position>(0, App.height - App.third_fontsize - App.main_fontsize)</position>
 		<text>'Exit'</text>
 		<fontsize>App.main_fontsize</fontsize>
 	</button>

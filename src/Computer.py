@@ -96,7 +96,11 @@ class Computer:
                 random.choice(rotation_modifiers),
                 random.choice(layer_modifiers),
             )
-            if self.puzzle[0] != "M" and self.puzzle[0] != "C":
+            if (
+                self.puzzle[0] != "M"
+                and self.puzzle[0] != "C"
+                and self.puzzle[0] != "2"
+            ):
                 try:
                     prev_moves.index(str(new_move[0][0]))
                     continue
