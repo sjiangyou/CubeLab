@@ -5,10 +5,10 @@ Main Fontsize:
 Scramble and Average Fontsize:
 50
 Text color: 
-0,255,0
+255,255,255
 Background color: 
 0,0,0
 Preferred Timing Method (Stackmat or Timer):
 Stackmat
 Directory to write times to (Optional, leave blank to write inside the program folder):
-~/Programs/CubeLab
+

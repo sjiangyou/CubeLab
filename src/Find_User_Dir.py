@@ -1,14 +1,18 @@
 import os
+import pathlib
+from pathlib import Path
 
 
 def find(folder) -> str:
     try:
+        if folder == "":
+            raise FileNotFoundError
         os.chdir(os.path.expanduser(folder))
-        return os.path.join(os.getcwd(), "")
+        return os.getcwd()
     except FileNotFoundError:
-        for root, dirs, files in os.walk(os.path.expanduser("~")):
-            if root.endswith("CubeLab/src"):
-                return os.path.join(root[:-4], "")
+        for root, dirs, files in os.walk(Path.home()):
+            if root.endswith("CubeLab"):
+                return root
 
 
 if __name__ == "__main__":
