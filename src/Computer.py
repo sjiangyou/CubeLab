@@ -7,9 +7,9 @@ class Computer:
         self.puzzle: str = puzzle
         self.times: list[str] = []
         self.name: str = ""
-        self.PB_single: str = ""
-        self.PB_avg: str = ""
-        self.PB_scramble: str = ""
+        self.pb_single: str = ""
+        self.pb_avg: str = ""
+        self.pb_scramble: str = ""
         self.single: bool = False
         self.average: bool = False
         self.average_type: str = "AO5"
@@ -21,8 +21,8 @@ class Computer:
         textlines: list[str] = text.split("\n")
         name = textlines[0]
         average_type = textlines[2][0:3]
-        PB_avg, PB_single = textlines[2][5:], textlines[1][3:]
-        PB_scramble = textlines[3][13:]
+        pb_avg, pb_single = textlines[2][5:], textlines[1][3:]
+        pb_scramble = textlines[3][13:]
         temp_lst = textlines[4:]
         times_lst = [elem.split(" ") for elem in temp_lst]
         return_lst = [t for lst in times_lst for t in lst]
@@ -30,11 +30,11 @@ class Computer:
         (
             self.times,
             self.name,
-            self.PB_single,
-            self.PB_avg,
-            self.PB_scramble,
+            self.pb_single,
+            self.pb_avg,
+            self.pb_scramble,
             self.average_type,
-        ) = (return_lst, name, PB_single, PB_avg, PB_scramble, average_type)
+        ) = (return_lst, name, pb_single, pb_avg, pb_scramble, average_type)
 
     def set_possible_moves(self) -> tuple:
         moves = []
@@ -293,28 +293,28 @@ class Computer:
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
             current_average = str(self.calculate_average(self.average_type))
-            if (new_time and not self.PB_single) or (
-                new_time != "DNF" and float(new_time) <= float(self.PB_single)
+            if (new_time and not self.pb_single) or (
+                new_time != "DNF" and float(new_time) <= float(self.pb_single)
             ):
                 self.single = True
-                self.PB_scramble = self.scramble
-                self.PB_single = new_time
+                self.pb_scramble = self.scramble
+                self.pb_single = new_time
             if (
-                current_average != "NA" and not (self.PB_avg or self.PB_avg == " ")
+                current_average != "NA" and not (self.pb_avg or self.pb_avg == " ")
             ) or (
                 len(self.times) >= int(self.average_type[2:])
-                and float(current_average) <= float(self.PB_avg)
+                and float(current_average) <= float(self.pb_avg)
             ):
                 self.average = True
-                self.PB_avg = str(current_average)
+                self.pb_avg = str(current_average)
             self.write_file()
 
     def write_file(self) -> None:
         with open(self.file, "w", encoding="utf-8") as file:
             return_str = (
-                f"{self.name}\nS: {str(self.PB_single)}\n"
-                + f"{self.average_type}: {str(self.PB_avg)}\n"
-                + f"PB Scramble: {self.PB_scramble}"
+                f"{self.name}\nS: {str(self.pb_single)}\n"
+                + f"{self.average_type}: {str(self.pb_avg)}\n"
+                + f"PB Scramble: {self.pb_scramble}"
             )
             if len(self.times) != 0:
                 return_str += "\n"
