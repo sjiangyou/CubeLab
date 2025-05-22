@@ -1,10 +1,12 @@
 import time
 import os
+import sys
 import pygame
 from pygame.locals import *
 from Computer import Computer
 from Find_User_Dir import find
 from Parse_Scene_XML import parse
+from Generate_Fontsizes import generate_fontsizes
 
 
 class App:
@@ -18,6 +20,7 @@ class App:
     width, height = pygame.display.get_surface().get_size()
     backgroundcolor = (0, 0, 0)
     textcolor = (255, 255, 255)
+    font_file = ""
     main_fontsize = 0
     second_fontsize = 0
     third_fontsize = 0
@@ -41,21 +44,29 @@ class App:
 
     def apply_user_settings(self) -> None:
         App.averages = self.user_settings[0].split(", ")
-        App.main_fontsize = int(self.user_settings[1])
-        App.second_fontsize = int(self.user_settings[2])
+        App.font_file = self.user_settings[1]
+        App.main_fontsize = int(self.user_settings[2])
+        App.second_fontsize = int(self.user_settings[3])
         App.third_fontsize = App.second_fontsize - 20
-        with open("fontsizes.txt", "r", encoding="utf-8") as fontsizes:
+        if not os.path.exists(f"resources/fonts/{App.font_file}"):
+            print(f"Font file not found at {os.getcwd()}. Exiting...")
+            sys.exit()
+        if not os.path.exists(f"resources/fonts/{App.font_file}.txt"):
+            generate_fontsizes(App.font_file)
+        with open(
+            f"resources/fonts/{App.font_file}.txt", "r", encoding="utf-8"
+        ) as fontsizes:
             fonts = fontsizes.read().split("\n")
         App.fonts = [eval(size) for size in fonts]
         App.textcolor, App.backgroundcolor = self.extract_color(
-            self.user_settings[3]
-        ), self.extract_color(self.user_settings[4])
-        App.timing_method = self.user_settings[5]
-        os.chdir(find(self.user_settings[6]))
+            self.user_settings[4]
+        ), self.extract_color(self.user_settings[5])
+        App.timing_method = self.user_settings[6]
+        os.chdir(find(self.user_settings[7]))
 
     def extract_color(self, rgb) -> tuple:
         rgb = rgb.split(",")
-        rgb = [int(value) for value in rgb]
+        rgb = [int(value.strip()) for value in rgb]
         return tuple(rgb)
 
     def change_active_text_mouse(self, mouse) -> None:
@@ -182,8 +193,11 @@ class App:
                                     Textbox(
                                         pos=(
                                             0,
-                                            (App.main_fontsize * 3)
-                                            + (App.second_fontsize * (count + 1)),
+                                            (App.fonts[App.main_fontsize][1] * 3)
+                                            + (
+                                                App.fonts[App.second_fontsize][1]
+                                                * (count + 1)
+                                            ),
                                         ),
                                         text=self.active_scene.scdisplay[0].text[
                                             loc : indicies[num + 1]
@@ -289,7 +303,8 @@ class Textbox:
 
     def set_font(self) -> None:
         self.font = pygame.font.Font(
-            os.path.join(App.program_dir, "Courier_New.ttf"), self.fontsize
+            os.path.join(App.program_dir, f"resources/fonts/{App.font_file}"),
+            self.fontsize,
         )
 
     def render(self) -> None:
@@ -315,15 +330,13 @@ class Textbox:
     def rollover(self) -> list:
         return_indicies = [0]
         possible_splits = [i for i, char in enumerate(self.text) if char == " "]
-        max_move_length = max([len(move) for move in App.computer.scramble.split(" ")])
-        high = (
-            pygame.display.get_surface().get_width() // (App.fonts[self.fontsize][0])
-        ) - 1
+        max_move_length = max(len(move) for move in App.computer.scramble.split(" "))
+        high = (App.width // (App.fonts[self.fontsize][0])) - 1
         low = high - max_move_length
         while possible_splits:
             try:
                 return_indicies.append(
-                    max([num for num in possible_splits if low <= num <= high])
+                    max(num for num in possible_splits if low <= num <= high)
                 )
             except ValueError:
                 return_indicies.append(possible_splits[-1])
