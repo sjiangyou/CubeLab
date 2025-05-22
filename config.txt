@@ -1,5 +1,7 @@
 Averages displayed: 
 AO5, MO3, AO12, AO20, AO50, AO100, AO1000
+Font (filename, must be a monospaced font):
+CourierNew.ttf
 Main Fontsize: 
 75
 Scramble and Average Fontsize:
