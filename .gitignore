@@ -2,8 +2,10 @@ test.py
 *.txt
 !config.txt
 !example.txt
-!fontsizes.txt
 !requirements.txt
+!resources/fonts/CourierNew.ttf.txt
+resources/fonts/*
+!resources/fonts/CourierNew.ttf
 __pycache__/
 build/
 dist/
