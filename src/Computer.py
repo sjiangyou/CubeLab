@@ -124,8 +124,8 @@ class Computer:
                     bottom_move = int(move[0][split_index + 1 :])
                     top_index = top_moves.index(top_move)
                     bottom_index = bottom_moves.index(bottom_move)
-                    U_top_layer = top_layer[top_index:] + top_layer[:top_index]
-                    D_bottom_layer = (
+                    u_top_layer = top_layer[top_index:] + top_layer[:top_index]
+                    d_bottom_layer = (
                         bottom_layer[bottom_index:] + bottom_layer[:bottom_index]
                     )
                     slice_top_index = (
@@ -141,12 +141,12 @@ class Computer:
                     )
                     slice_bottom_index -= bottom_index
                     top_layer = (
-                        D_bottom_layer[slice_bottom_index:]
-                        + U_top_layer[slice_top_index:]
+                        d_bottom_layer[slice_bottom_index:]
+                        + u_top_layer[slice_top_index:]
                     )
                     bottom_layer = (
-                        D_bottom_layer[:slice_bottom_index]
-                        + U_top_layer[:slice_top_index]
+                        d_bottom_layer[:slice_bottom_index]
+                        + u_top_layer[:slice_top_index]
                     )
                     top_moves = [sum(top_layer[:i]) for i in range(len(top_layer))]
                     bottom_moves = [
@@ -275,7 +275,7 @@ class Computer:
         return time
 
     def convert_fasttime(self, time) -> str:
-        if time == "NA" or time == "DNF":
+        if time in ("NA", "DNF"):
             return time
         if not time.isdigit():
             time = time.replace(":", "").replace(".", "")
