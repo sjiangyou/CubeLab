@@ -1,13 +1,15 @@
 Averages displayed: 
 AO5, MO3, AO12, AO20, AO50, AO100, AO1000
+Font (filename, must be a monospaced font):
+CourierNew.ttf
 Main Fontsize: 
 75
 Scramble and Average Fontsize:
 50
-Text color: 
-255,255,255
-Background color: 
-0,0,0
+Text color:
+255, 255, 255
+Background color:
+0, 0, 0
 Preferred Timing Method (Stackmat or Timer):
 Stackmat
 Directory to write times to (Optional, leave blank to write inside the program folder):
