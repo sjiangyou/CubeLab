@@ -285,7 +285,7 @@ class Computer:
             final_time += elem + ":" if i != len(splits) - 2 else elem + "."
         return str(self.convert_time(final_time[:-1]))
 
-    def run(self, new_time) -> None:
+    def run(self, new_time, previous_scramble) -> None:
         if new_time.replace(".", "").replace(":", "").isdigit() or new_time == "DNF":
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
@@ -294,7 +294,7 @@ class Computer:
                 new_time != "DNF" and float(new_time) <= float(self.pb_single)
             ):
                 self.single = True
-                self.pb_scramble = self.scramble
+                self.pb_scramble = previous_scramble
                 self.pb_single = new_time
             if (
                 current_average != "NA" and not (self.pb_avg or self.pb_avg == " ")

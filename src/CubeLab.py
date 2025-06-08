@@ -94,6 +94,7 @@ class App:
                     or self.active_text == self.active_scene.exitbutton
                 ):
                     App.running = False
+
                 if event.type == KEYDOWN:
                     if event.key == K_BACKSPACE:
                         if (
@@ -103,16 +104,18 @@ class App:
                             self.active_scene.active_text.text = (
                                 self.active_scene.active_text.text[:-1]
                             )
+
                     elif event.key == K_TAB:
                         self.change_active_text_keyboard()
+
                     elif event.key == K_RETURN:
-                        App.file = self.active_scene.filein.text[
+                        App.computer.file = self.active_scene.filein.text[
                             self.active_scene.filein.init_len :
                         ]
-                        App.puzzle = self.active_scene.eventin.text[
+                        App.computer.puzzle = self.active_scene.eventin.text[
                             self.active_scene.eventin.init_len :
                         ]
-                        App.computer = Computer(App.file, App.puzzle)
+                        previous_scramble = App.computer.scramble
                         try:
                             App.computer.read_file()
                             new_scramble = App.computer.generate_scramble()
@@ -135,11 +138,13 @@ class App:
                                 new_scramble = App.computer.scramble = (
                                     "Created new file. "
                                 )
+
                         if self.active_scene.active_text == self.active_scene.timein:
                             App.computer.run(
                                 self.active_scene.timein.text[
                                     self.active_scene.timein.init_len :
-                                ]
+                                ],
+                                previous_scramble,
                             )
                             self.active_scene.alerts.text = ""
                             if App.computer.single:
@@ -222,12 +227,16 @@ class App:
                         self.active_scene.scdisplay[0].text = (
                             self.active_scene.scdisplay[0].text[0 : indicies[0]]
                         )
+
                     else:
                         self.active_scene.update_active_text(event.unicode)
+
                     for text in self.active_scene.nodes:
                         text.render()
+
                 if event.type == MOUSEBUTTONDOWN:
                     self.change_active_text_mouse(event.pos)
+
             self.screen.fill(App.backgroundcolor)
             for text in self.active_scene.nodes:
                 text.draw()
