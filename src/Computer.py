@@ -57,19 +57,16 @@ class Computer:
             layer_modifiers = [""]
             length = 42
         else:
-            length = 30
+            length = 15
             rotation_modifiers = ["", "'"]
             layer_modifiers = [""]
             if self.puzzle[0] == "P":
                 moves = ["U", "L", "R", "B", "u", "l", "r", "b"]
             elif self.puzzle[0] == "C":
-                length = 15
                 moves = [str(i) for i in range(-5, 7)]
                 del rotation_modifiers[1]
             elif self.puzzle.find("1") == -1:
                 moves = ["U", "L", "R", "B"]
-            elif self.puzzle[0] == "S":
-                length = 15
                 del rotation_modifiers[1]
                 top_moves = [0, 1, 3, 4, 6, 7, 10]
                 bottom_moves = [0, 2, 3, 5, 6, 8, 9, 11]
@@ -288,7 +285,7 @@ class Computer:
             final_time += elem + ":" if i != len(splits) - 2 else elem + "."
         return str(self.convert_time(final_time[:-1]))
 
-    def run(self, new_time) -> None:
+    def run(self, new_time, previous_scramble) -> None:
         if new_time.replace(".", "").replace(":", "").isdigit() or new_time == "DNF":
             new_time = self.convert_fasttime(new_time)
             self.times.insert(0, new_time)
@@ -297,7 +294,7 @@ class Computer:
                 new_time != "DNF" and float(new_time) <= float(self.pb_single)
             ):
                 self.single = True
-                self.pb_scramble = self.scramble
+                self.pb_scramble = previous_scramble
                 self.pb_single = new_time
             if (
                 current_average != "NA" and not (self.pb_avg or self.pb_avg == " ")
