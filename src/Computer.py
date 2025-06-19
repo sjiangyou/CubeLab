@@ -67,6 +67,7 @@ class Computer:
                 del rotation_modifiers[1]
             elif self.puzzle.find("1") == -1:
                 moves = ["U", "L", "R", "B"]
+            elif self.puzzle[0] == "S":
                 del rotation_modifiers[1]
                 top_moves = [0, 1, 3, 4, 6, 7, 10]
                 bottom_moves = [0, 2, 3, 5, 6, 8, 9, 11]
