@@ -16,4 +16,6 @@ bin/
 Scripts/
 include/
 lib/
+lib64/
 pyvenv.cfg
+.python-version
