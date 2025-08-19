@@ -1,9 +1,10 @@
 import os
+from pathlib import Path
 import pygame
 
 
 def generate_fontsizes(file_in) -> None:
-    os.chdir("resources/fonts/")
+    os.chdir(Path(__file__).parent.parent / "resources" / "fonts")
     output_str = ""
 
     for size in range(120):
@@ -15,12 +16,9 @@ def generate_fontsizes(file_in) -> None:
     with open(f"{file_in}.txt", "w", encoding="utf-8") as f:
         f.write(output_str)
 
-    os.chdir("../..")
-
 
 if __name__ == "__main__":
     pygame.init()
     input_file = input("Input the font file name: ")
-    os.chdir("../")
     generate_fontsizes(input_file)
     pygame.quit()
