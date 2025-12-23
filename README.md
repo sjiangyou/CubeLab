@@ -32,6 +32,4 @@ Note that all times displayed and saved are formatted like XXXX.XX
 To exit, click on the exit button.
 
 # For contributors:
-Bash scripts are provided to compile the program for MacOS only.
-Please use PyInstaller >= 6.0.0 when compiling the program and name the resulting executable file appropriately.
-If you are compiling for a new OS, please also add a new compiliation shell script to expedite future contibutions.
+Bash scripts are provided to compile the program for all major operating systems.
