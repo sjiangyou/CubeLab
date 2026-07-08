@@ -11,12 +11,7 @@ build/
 dist/
 *.spec
 .DS_Store
-env/
-bin/
-Scripts/
-include/
-lib/
-lib64/
+.venv/
 pyvenv.cfg
 .python-version
 .envrc

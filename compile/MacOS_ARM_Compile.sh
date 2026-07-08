@@ -3,7 +3,7 @@
 if pwd | grep -q "compile"; then
     cd ..
 fi
-python3.11 -m venv .
+python3.11 -m venv .venv
 source bin/activate
 pip3.11 install -r requirements.txt
 cd src

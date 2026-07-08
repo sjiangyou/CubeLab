@@ -3,7 +3,7 @@
 if pwd | grep -q "compile"; then
     cd ..
 fi
-python -m venv .
+python -m venv .venv
 source Scripts/activate
 pip install -r requirements.txt
 cd src
